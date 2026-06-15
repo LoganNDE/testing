@@ -1,0 +1,1385 @@
+    PARTE 2
+    Lista de requisitos de Auditoría IFS HPC
+
+               Sobre los requisitos:
+               • Los requisitos con un “*” requieren de una información adicional obligatoria en el Informe de
+
+                  Auditoría IFS HPC..
+
+    1 Gobernanza y compromiso
+
+    1.1 Política
+
+    1.1.1 La dirección deberá desarrollar, implementar y mantener una política corporativa que deberá incluir,
+               como mínimo:
+               • requisitos del producto,
+               • orientación al cliente,
+               • cultura de seguridad del producto,
+               • sostenibilidad.
+               La política corporativa deberá ser comunicada a todos los empleados y se desglosará en objetivos
+               específicos para los departamentos correspondientes.
+
+    1.1.2 Toda la información pertinente relacionada con los requisitos de producto deberá comunicarse de
+               forma efectiva y a su debido tiempo al personal implicado.
+
+    1.2 Estructura corporativa
+
+    1.2.1*  KO N° 1:  La dirección se asegurará de que todos los empleados sean conscientes de sus
+            responsabilidades respecto a los requisitos del producto y de que se implanten mecanismos
+            para supervisar la eficacia de su desempeño. Dichos mecanismos deberán estar claramente
+            identificados y documentados.
+
+    1.2.2 La dirección facilitará los recursos apropiados y suficientes para cumplir con los requisitos del
+               producto y del proceso.
+
+    1.2.3 El departamento responsable de la gestión de la seguridad y calidad del producto deberá depender
+               directamente de la dirección. Se documentará y mantendrá un organigrama que muestre la
+               estructura de la compañía.
+
+    1.2.4 La dirección deberá asegurarse de que todos los procesos (documentados o no) sean conocidos
+               por el personal correspondiente y sean ejecutados de manera consistente.
+
+54  IFS HPC VERSIÓN 3
+1.2.5*  La dirección se asegurará de que la entidad de certificación esté informada de cualquier cambio
+        que pueda afectar a la capacidad de la compañía para cumplir con los requisitos de la certificación.
+        Esto incluirá como mínimo:
+
+        • cualquier cambio en el nombre de la entidad legal,
+
+        • cualquier cambio de ubicación del emplazamiento de producción.
+
+        Para las siguientes situaciones específicas:
+        retirada(s) de producto(s) por orden oficial y/o cualquier visita de las autoridades que resulte en
+        notificación y/o sanciones relacionadas con la seguridad y/o legalidad del producto, se informará
+        a la entidad de certificación en un plazo de tres (3) días laborables.
+
+1.3 Revisión por la dirección                                                                                          PARTE 2
+
+1.3.1 La dirección debe asegurarse de que el sistema de gestión de la seguridad y calidad del producto
+           es revisado. Esta actividad se planificará en un plazo dentro de un periodo de12 meses y su ejecución
+           no excederá de 15 meses. Dichas revisiones deberán contener como mínimo:
+           • revisión de la(s) política(s) y los objetivos,
+           • revisión de la cultura de seguridad de los productos,
+           • resultados de auditorías e inspecciones del emplazamiento,
+           • comunicaciones con el cliente positivas y negativas,
+           • cumplimiento de procesos y conformidad del producto,
+           • estado de las correcciones y acciones correctivas,
+           • notificaciones de las autoridades.
+
+1.3.2 Las acciones de la revisión por la dirección estarán destinadas a apoyar la mejora. La revisión por
+           la dirección evaluará las acciones de seguimiento de las revisiones por la dirección anteriores y
+           cualquier cambio que pueda afectar al sistema de gestión de la seguridad y calidad del producto.
+           La revisión por la dirección estará plenamente documentada.
+
+1.3.3 La dirección identificará y revisará al menos una vez en un periodo de 12 meses, o cada vez que se
+           produzcan cambios significativos (por ejemplo, mediante auditorías internas o inspecciones in situ)
+           la infraestructura y el entorno de trabajo necesarios para lograr la conformidad con los requisitos
+           del producto. Esto incluirá como mínimo:
+           • edificios (incluidas las condiciones externas de los locales),
+           • sistemas de suministro,
+           • maquinaria y equipamiento,
+           • transporte,
+           • instalaciones del personal,
+           • condiciones ambientales,
+           • condiciones higiénicas,
+           • diseño del lugar de trabajo,
+           • influencias externas (p.e. ruido, vibración).
+
+           En base al riesgo, los resultados de la revisión se considerarán para la planificación de inversiones.
+
+        IFS HPC VERSIÓN 3                                                                                          55
+    2 Sistema de gestión de la seguridad y calidad del
+          producto
+
+    2.1 Gestión de la calidad
+
+    2.1.1 Gestión de documentos
+
+    2.1.1.1 El sistema de gestión de la seguridad y calidad del producto se documentará, implementará y
+               mantendrá en un lugar seguro. Esto aplica tanto a los sistemas físicos y/o a los sistemas digitales
+               documentados.
+
+    2.1.1.2 Todos los documentos deberán ser claramente legibles, fáciles de entender y no presentarán
+               ambigüedades. Deberán estar disponibles en todo momento para las personas implicadas.
+
+    2.1.1.3  Se documentará, implementará y mantendrá un procedimiento para el control de los documentos
+             y sus modificaciones. Todos los documentos necesarios para el cumplimiento de los requisitos del
+             producto estarán disponibles en su versión más reciente. Se registrará el motivo de cualquier
+             modificación en los documentos que se consideren críticos para los requisitos.
+
+    2.1.2 Registros e información documentada
+
+    2.1.2.1 Todos los registros e información documentada necesaria para los requisitos del producto serán
+               completos y detallados y se conservarán de manera segura y estarán disponibles si se solicitan.
+
+    2.1.2.2  Los registros y la información documentada serán legibles y auténticos. Se mantendrán de manera
+             que la revisión o modificación posterior estén prohibidos a menos que las modificaciones las realice
+             personal autorizado. Si los registros son electrónicos, se establecerá un sistema para garantizar que
+             sólo el personal autorizado tenga acceso a crear o modificar dichos registros (por ejemplo, protección
+             con contraseña).
+
+    2.1.2.3* Todos los registros e información documentada se conservarán de acuerdo con los requisitos legales
+               y de cliente. Si no existen tales requisitos, los registros y la información documentada se conservará
+               durante un mínimo de un año después de la vida útil especificada. Para productos que no tengan
+               vida útil, el tiempo de conservación de registros e información documentada se justificará y dicha
+               justificación deberá quedar documentada.
+
+    2.2 Gestión de la seguridad del producto
+
+    2.2.1 Marco de evaluación de riesgos
+
+    2.2.1.1 Antes de desarrollar un sistema de análisis de peligros y evaluación del riesgo, la compañía
+               implementará todas las buenas prácticas de fabricación / mejores prácticas que se utilizan
+               normalmente en su alcance de actividad.
+
+56  IFS HPC VERSIÓN 3
+2.2.1.2  La base del sistema de control de la seguridad del producto de la compañía será un sistema de
+         gestión del riesgo sistemático, exhaustivo y totalmente implantado. Tendrá en cuenta los requisitos
+         legales de los países de producción y de destino que puedan ir más allá de dichos principios. El
+         análisis de peligros y evaluación del riesgo deberán ser adecuados y aplicarse en cada emplazade
+         producción.
+
+2.2.1.3  El análisis de peligros y evaluación del riesgo abarcarán todos los grupos de materias primas,
+         productos o grupos de productos, así como todos los procesos (incluidos los procesos subcontratados),
+         desde la entrada de mercancías hasta la expedición de los productos finales, incluida la gestión del
+         material de envasado de los productos.
+
+2.2.1.4  La compañía se asegurará de que el análisis de peligros y evaluación del riesgo se base en datos
+         científicos, o en especificaciones técnicas verificadas relacionadas con los productos fabricados y
+         sus procedimientos. 
+         Esta información deberá estar alineada con cualquier nuevo desarrollo técnico de procesos.
+
+2.2.1.5 En el en caso de que haya cambios en las materias primas, materiales de envasado, métodos de                   PARTE 2
+           procesado, infraestructura y/o equipos, el análisis de peligros y evaluación del riesgo será revisado
+           para garantizar que los requisitos de seguridad del producto se cumplen.
+
+2.2.2 Equipo de evaluación del riesgo
+
+2.2.2.1  El equipo de evaluación del riesgo será multidisciplinario e incluirá personal de operación. El personal
+         seleccionado para ser miembro del equipo de evaluación del riesgo tendrá conocimiento específico
+         sobre peligros y riesgos asociados a productos y procesos. Si el nivel de conocimiento necesario
+         no está disponible dentro de la empresa, se obtendrá asesoramiento especializado externo.
+
+2.2.2.2 Los responsables del desarrollo y mantenimiento del sistema de gestión del riesgo habrán recibido
+           una formación adecuada en la aplicación de los principios de gestión del riesgo en base al instrumento
+           de evalaución del riesgo que utilice la compañía (Risk Matrix, FMEA, APPCC, RPN, etc.).
+
+2.2.2.3 El equipo de evaluación del riesgo deberá tener un fuerte apoyo de la dirección, ser conocido y
+           estar bien establecido en la compañía.
+
+2.2.3 Análisis de peligros y evaluación del riesgo
+
+2.2.3.1 Descripción del producto
+           Se documentará y mantendrá una descripción completa del producto y contendrá toda la infor-
+           mación relativa a los requisitos del poroduco que incluye como mínimo:
+           • composición (incluida la reelaboración cuando proceda),
+           • parámetros físicos, químicos y microbiológicos,
+           • métodos de tratamiento,
+           • envasado,
+           • durabilidad (vida útil),
+           • condiciones de almacenamiento, método de transporte y distribución.
+
+                                       IFS HPC VERSIÓN 3                                                           57
+    2.2.3.2  Identificar el uso esperado y razonablemente previsible
+             El uso esperado y razonablemente previsible del producto se describirá en relación con el uso
+             esperado del producto por el consumidor final teniendo en cuenta grupos de consumidores
+             vulnerables.
+
+    2.2.3.3  Construir el diagrama de flujo
+             Para cada producto o grupo de productos, grupos de materias primas y para cada una de las
+             variaciones de procesos y subprocesos (incluyendo reelaboración, reprocesado y subcontratación)
+             se deberá documentar y mantener un diagrama de flujo. El diagrama de flujo identificará cada paso
+             e identificará claramente cada punto de control crítico y otras medidas de control. Será fechado,y
+             en caso de cualquier cambio será actualizado.
+
+    2.2.3.4 Confirmación in situ del digrama de flujo
+               El equipo de evaluación del riesgo verificará el diagrama de flujo in situ y en todas las etapas. Si
+               procede, se corregirá el diagrama.
+
+    2.2.3.5 Conducir un análisis de peligros y evaluación del riesgo para cada paso
+
+    2.2.3.5.1 Se realizará un análisis de todos los peligros físicos, químicos (incluyendo alérgenos), y biológicos
+               que podrían esperarse razonablemente. Se realizará un análisis de peligros y evaluación del riesgo
+               para cada etapa del proceso, desde las materias primas hasta los productos finales. El análisis incluirá
+               también los peligros relacionados con los materiales en contacto directo con el producto.
+
+    2.2.3.5.2 El análisis de peligros deberá considerar la probabilidad de aparición de los peligros y la gravedad
+               de sus efectos adversos en la salud. Se considerarán las medidas de control específicas que se
+               aplicarán para controlar cada peligro. La metodología para evaluar el riesgo estará documentada.
+
+    2.2.3.6* Determinar puntos de control crítico y otras medidas de control
+               Se facilitará la determinación de los PCC correspondientes y otras medidas de control mediante
+               la aplicación de un árbol de decisiones u otras herramientas, que demuestren un planteamiento
+               lógico y razonado.
+
+    2.2.3.7 Establecer limites críticos para cada punto de control crítico
+               Para cada punto de control crítico se definirán y validarán los limites críticos para identificar cla-
+               ramente cuándo un proceso está fuera de control.
+
+    2.2.3.8* KO N° 2:  Establecer un sistema de vigilancia para cada punto de control crítico:
+               Se documentará, implementará y mantendrá para cada PCC, procedimientos específicos de
+               vigilancia que especifiquen métodos, frecuencia de medición u observación y registro de
+               resultados, parar detectar cualquier pérdida de control de dicho PCC. Cada PCC definido deberá
+               estar bajo control. La vigilancia y el control de cada PCC se demostrarán mediante registros.
+
+    2.2.3.9 Los registros de la vigilancia de los PCCs deberán ser verificados por un responsable de la compañía
+               y ser mantenidos durante un periodo de tiempo adecuado.
+
+    2.2.3.10 El personal operativo a cargo de la vigilancia de los PCCs y otras medidas de control deberá haber
+               recibido una formación / instrucción específica.
+
+    2.2.3.11 Las medidas de control distintas de los PCCs se vigilaran, registrarán y controlarán mediante criterios
+               medibles u observables.
+
+58  IFS HPC VERSIÓN 3
+2.2.3.12 Establecer acciones correctivas                                                                               PARTE 2
+           Cuando la vigilancia indique que un PCC o una medida de control que no sea un PCC está fuera
+           de control, se deberán implementar y documentar las acciones correctivas adecuadas. Dichas
+           acciones correctivas deberán tomar también en consideración cualquier acción tomada en relación
+           a productos no conformes e identificar la causa raíz de la pérdida de control de los PCCs.
+
+2.2.3.13* Establecer procesos de verificación
+           Se documentarán, implementarán y mantendrán procedimientos de verificación para confirmar
+           que el análisis de peligros y evaluación del riesgo son efectivos. Las actividades de verificación del
+           análisis de peligros y la evaluación del riesgo incluyen por ejemplo:
+           • auditorías internas,
+           • pruebas,
+           • muestreo,
+           • evaluaciones,
+           • desviaciones y no-conformidades,
+           • reclamaciones.
+
+           Los resultados de esta verificación se realizarán al menos una vez en un período de 12 meses
+           o cada vez que se produzcan cambios significativos y se incorporarán al análisis de peligros y
+           evaluación de riesgo.
+
+3 Gestión de los recursos
+
+3.1 Recursos humanos
+
+3.1.1 Todo el personal que realice trabajos que afecten a la seguridad, legalidad y/o calidad del producto
+           tendrán la competencia necesaria adquirida a través de educación, experiencia laboral y / o formación
+           y acorde con su función.
+
+3.1.2 Las responsabilidades, competencias y descripciones de trabajo para todos los puestos de trabajo
+           que tengan un impacto en la seguridad y calidad del producto deberán estar documentadas,
+           implementadas y mantenidas. Se definirá la asignación de puestos clave.
+
+3.2 Higiene personal
+
+3.2.1*  Los requisitos basados en el riesgo relativos a la higiene del personal deberán documentarse,
+        implemy mantenerse. Estos incluirán como mínimo los campos siguientes:
+        • pelo y barba,
+        • ropa de protección (incluidas las condiciones de uso en las instalaciones del personal),
+        • lavado de manos, desinfección e higiene de manos,
+        • comer, beber, fumar/vapear u otro uso de tabaco,
+        • acciones a emprender en caso de cortes o abrasiones en la piel,
+        • uñas, joyas y pertenencias personales (incluyendo medicamentos),
+        • notificación de enfermedades infecciosas / problemas de salud.
+
+                           IFS HPC VERSIÓN 3                                                                       59
+    3.2.2 Los requisitos relativos a la higiene personal serán entendidos y aplicados por todo el personal
+               relevante, subcontratistas y visitantes. El cumplimiento de estos requisitos deberá ser comprobado
+               regularmente.
+
+    3.2.3 No se deberán lucir joyas o bisutería (incluidos piercings) y relojes. Cualquier excepción a esta norma
+               deberá haber sido exhaustivamente evaluada en base al riesgo.
+
+    3.2.4 Los cortes y las abrasiones cutáneas se cubrirán con un apósito/venda coloreado y que no suponga
+               riesgos de contaminación. Los apósitos/ vendajes deben ser impermeables y de color diferente al
+               color del producto. Cuando proceda:
+               • los apósitos / vendas deberán incluir una tira metálica,
+               • se deberán utilizar guantes de un solo uso.
+
+    3.3 Ropa de protección para el personal, subcontratistas y visitantes
+
+    3.3.1 Existirán procedimientos en la compañía para garantizar que el personal, subcontratistas y visitantes
+               conozcan las normas en relación a la gestión del uso y cambio de ropa de protección en áreas
+               específicas conforme a los requisitos del producto.
+
+    3.2.2 En las áreas de trabajo en las que se requiera el uso de gorros o mascarillas para barba (protectores),
+               el pelo deberá estar cubierto totalmente para evitar la contaminación del producto.
+
+    3.3.3 Se implementarán normas claras de uso para aquellas áreas / actividades en las que se requiera el
+               uso de guantes (de un color diferente al del producto).
+
+    3.3.4 Cuando sea necesario, se dispondrá de ropa de protección adecuada para garantizar la seguridad
+               del personal en cantidad suficiente para cada empleado.
+
+    3.3.5 Cuando sea necesario, toda la ropa de protección debe ser lavada a fondo y regularmente. En base
+               al riesgo, la compañía determinará si la ropa debe ser lavada por una lavandería contratada, una
+               lavandería in situ o por el propio empleado, de acuerdo con unas directrices documentadas que
+               incluirán la comprobación de su limpieza.
+
+    3.4 Procedimiento aplicable a las enfermedades sanitarias e infecciosas
+
+    3.4.1 Deberán existir medidas escritas y comunicadas al personal, subcontratistas y visitantes en caso
+               cualquier enfermedad infecciosa que pueda tener un impacto sobre la seguridad del producto. En
+               caso de declaración de alguna, se tomarán medidas para minimizar el riesgo de contaminación de
+               los productos (si es aplicable al producto o actividad).
+
+    3.5 Formación e instrucción
+
+    3.5.1 La compañía deberá implantar programas de formación y/o instrucción documentados en función
+               de los productos y requisitos del proceso y las necesidades de formación del personal, y estos
+               deberán incluir:
+
+               • contenidos de la formación,
+
+60  IFS HPC VERSIÓN 3
+           • frecuencia de formación,                                                                          PARTE 2
+           • tarea del empleado,
+           • idiomas,
+           • tutor/ formador cualificado,
+           • eficacia de la formación.
+
+3.5.2 El programa documentado de formación y/o instrucción se hará extensivo a todo el personal,
+           incluyendo trabajadores estacionales o temporales y personal de compañías externas que estén
+           empleados en las correspondientes áreas de trabajo. Al ser contratados y antes de comenzar su
+           trabajo, se les proporcionará una formación según los programas de formación / instrucción
+           documentados.
+
+3.5.3 Deberán conservarse los registros de cada acción formativa debiendo constar en los mismos:
+           • lista de asistentes (incluyendo su firma personal),
+           • fecha,
+           • duración,
+           • contenido de la formación,
+           • nombre del formador/ tutor.
+
+3.5.4 Los contenidos de la formación y/o instrucción se revisarán y se actualizarán cuando sea necesario.
+           Se tendrá en especial consideración, al menos, los siguientes aspectos específicos:
+           • seguridad y calidad del producto (por ejemplo, BPF, evaluación del riesgo, etc.),
+           • cultura de seguridad del producto,
+           • defensa del producto,
+           • requisitos legales relativos a los productos,
+           • modificaciones en productos/procesos,
+           • comentarios de los anteriores programas de formación/instrucción documentados.
+
+3.6 Instalaciones para el personal
+
+3.6.1 La compañía proporcionará instalaciones adecuadas para el personal, que deberán ser proporcionales
+           en su tamaño, equipadas para la cantidad de empleados y diseñadas y gestionadas de forma que
+           se minimicen los riesgos para la seguridad del producto. Dichas instalaciones se mantendrán de
+           manera que se evite la contaminación.
+
+3.6.2 Se deberá minimizar el riesgo de contaminación del producto por alimentos y bebidas, y/o materiales
+           extraños. Se deberá tomar en consideración los alimentos y bebidas de las máquinas de vending,
+           comedor, y/o los que el personal trae al trabajo.
+
+3.6.3 La compañía dispondrá de vestuarios adecuados para el personal, subcontratistas y visitantes. Si
+           es necesario, la ropa de calle y la de protección se guardarán por separado.
+
+3.6.4 Los vestuarios se situarán de tal manera que permitan el acceso directo a las áreas en las que se
+           manipulen los productos. Cualquier excepción a esta norma deberá haber sido exhaustivamente
+           evaluada en base al riesgo.
+
+IFS HPC VERSIÓN 3                                                                                          61
+    3.6.5  Los aseos no tendrán acceso directo a ningún área en la que se manipulen productos. Cualquier
+           excepción se evaluará exhaustivamente en base al riesgo. Los aseos estarán equipados con lavamanos
+           adecuados. Las instalaciones deberán contar con una ventilación natural o mecánica adecuada.
+           Deberá evitarse un flujo mecánico de aire desde un área contaminada a un área limpia.
+
+    3.6.6  Se dispondrá de instalaciones adecuadas para el lavado de manos cerca de los puntos de entrada,
+           y en las áreas de producción así como en las instalaciones para el personal. En base al riesgo se
+           equiparán otras zonas de forma similar.
+
+    3.6.7  Las instalaciones de lavado de manos estarán equipadas con:
+           • agua potable a una temperatura adecuada,
+           • equipo adecuado para el lavado y desinfección,
+           • equipo adecuado para el secado de las manos.
+
+    3.6.8  En base al riesgo, se tomarán adicionalmente las siguientes medidas de higiene / lavado de manos:
+           • grifería de accionado sin manos,
+           • desinfectante para manos,
+           • equipos adecuados de higiene,
+           • rotulación que señale los requisitos del lavado de manos,
+           • contenedores de residuos con apertura de accionamiento no manual.
+
+    3.6.9 Se implementará y mantendrá un programa basado en el riesgo para controlar la eficacia de la
+               higiene de las manos.
+
+    4 Procesos operativos
+
+    4.1 Enfoque al cliente y acuerdo contractual
+
+    4.1.1  Se implantará y mantendrá un proceso que permita identificar las necesidades y expectativas
+           fundamentales de los clientes. Los resultados de este proceso deberán ser utilizados como
+           aportaciones para la mejora continua de la compañía.
+
+    4.1.2  Todos los requisitos relacionados con la seguridad y calidad del producto dentro de los acuerdos
+           con los clientes, y cualquier revisión de estas cláusulas, deberán ser documentadas, comunicadas
+           y haber sido implementadas por cada uno de los departamentos implicados.
+
+    4.1.3  De conformidad con los requisitos del cliente, la dirección informará a sus clientes afectados, lo
+           antes posible, de cualquier problema relacionado con la seguridad o legalidad del producto, incluidas
+           las desviaciones y no conformidades que identifiquen las autoridades competentes.
+
+62  IFS HPC VERSIÓN 3
+4.2 Especificaciones y fórmulas
+
+4.2.1 Materias primas (incluyendo materiales de envasado), productos semi-acabados
+         y especificaciones de reproceso
+
+4.2.1.1  La especificaciones estarán documentadas e implementadas para todas las materias primas (materias
+         primas/ingredientes, aditivos, materiales de envasado, reproceso) y si es relevante, para producto
+         semi-acabado. Las especificaciones estarán actualizadas, sin ambigüedades y simepre conforme a
+         los requisitos legales.
+
+4.2.1.2 La identificación de las materias primas incluyendo materiales de envasado contendrá la siguiente          PARTE 2
+           información:
+           • nombre del producto,
+           • código de identificación único,
+           • fecha o número de recibo (si es relevante),
+           • nombre del proveedor,
+           • fecha de caducidad, si existe,
+           • número de referencia del lote proporcionado por el proveedor y el obtenido durante la
+              recepción, si son distintos.
+
+4.2.1.3 Deberá realizarse una re-evaluación de la idoneidad de las materias primas y productos semi-
+           acabados, en caso de que estén cerca de su fecha de caducidad o cuando se devuelvan al almacén
+           u otros parámetros relevantes proporcionados por el proveedor.
+
+4.2.1.4  Se deberá disponer de certificados de conformidad que demuestren cumplimiento de los requisitos
+         legales vigentes para todo el material de envasado que pueda tener una influencia en los productos.
+         Cuando no exista ningún requisito legal específico aplicable, se deberá disponer de evidencias para
+         demostrar que el material de envasado es adecuado para su uso. Esto aplica a materiales de envasado
+         que puedan tener influencia sobre productos semi-acabados y productos finales.
+
+4.2.1.5 Los parámetros clave de los materiales de envasado se definirán en especificaciones detalladas que
+           cumplan con la legislación relevante vigente y otros peligros o riesgos relavantes.
+
+4.2.2 Especificaciones de productos finales
+
+4.2.2.1  Las especificaciones de todos los productos finales deberán estar documentadas e implementadas.
+         Las especificaciones estarán actualizadas, serán trazables y sin ambigüedades, y estarán disponibles
+         para el personal relevante y siempre conforme a los requisitos legales y del cliente. Cuando sea
+         requerido por el cliente, las especificaciones de producto se aceptarán formalmente.
+
+4.2.2.2* KO N° 3:  La composición de los productos se basará en las especificaciones de los productos
+           finales vigentes y aprobadas. También serán la base para el control del proceso de producción
+           y para supervisar la conformidad de los productos finales.
+
+4.2.2.3 Cuando se solicite que los productos sean etiquetados y/o promocionados con una declaración
+           "libre de" ciertas sustancias o ingredientes, o cuando se excluyan ciertos métodos de tratamiento
+           o producción, se implementarán medidas para demostrar el cumplimiento de dicha declaración.
+
+                                             IFS HPC VERSIÓN 3                                                 63
+    4.2.2.4  Se establecerá un procedimiento documentado, implementado y mantenido para el control de la
+             creación, la aprobación y la modificación de especificaciones, que incluirá cuando se requiera, la
+             aceptación del cliente.
+             Este procedimiento incluirá la actualización de las especificaciones del producto final en caso de
+             modificaciones relacionadas con:
+
+             • materias primas,
+
+             • fórmulas/recetas,
+
+             • procesos que afectan a los productos finales,
+
+             • materiales de envasado que afectan a los productos finales.
+
+    4.3 Marco legislativo y desarrollo de producto
+
+    4.3.1 Marco legislativo
+
+    4.3.1.1 La compañía deberá cumplir la legislación vigente aplicable y, cuando sea aplicable registrar su
+               actividad de producción ante las autoridades locales. La compañía deberá ser capaz de demostrar
+               su propio papel en la cadena de suministro.
+
+    4.3.1.2 La compañía dispondrá de un sistema que garantice:
+               • que se mantiene informada de toda la legislación pertinente en materia de la seguridad y
+                  calidad de los productos,
+               • avances científicos y técnicos,
+               • los códigos de buenas prácticas del sector.
+
+               La legislación será entendida y aplicada en consecuencia.
+
+    4.3.1.3 Para todas las materias primas relevantes, estarán disponibles ediciones vigentes de fichas de
+               seguridad en el formato requerido para el país de destino.
+
+    4.3.1.4 Cuando sea necesario, la ficha de seguridad y / o composición de los productos finales se facilitará
+               y comunicará a las organizaciones apropiadas (p. ej. centros de seguridad nacional, páginas web
+               públicas, etc.), tomando en consideración la legislación vigente del país de destino.
+
+    4.3.1.5  Si aplica, la compañía encargará a un asesor de seguridad cualificado para considerar el perfil general
+             toxicológico de los ingredientes, su estructura química y nivel de exposición, y proporcionar
+             finalmente a la compañía una evaluación de la seguridad del producto final con respecto a la salud
+             humana.
+
+    4.3.1.6 El procedimiento garantizará que el etiquetado cumple con la legislación vigente en los países de
+               destino y con los requisitos del cliente.
+
+    4.3.1.7 La compañía garantizará que en caso de cambios en
+               • características del proceso,
+               • formulación del producto, incluida la reelaboración,
+               • material de envasado,
+               • requisitos legales,
+
+64  IFS HPC VERSIÓN 3
+         • requisitos de calidad del producto,
+         • requisitos del cliente,
+         el etiquetado se revisará y adaptará cuando sea necesario.
+
+4.3.2 Desarrollo de producto / Modificaciones de producto / Modificaciones de
+         procesos productivos
+
+4.3.2.1  La compañía tendrá implementado un procedimiento para el desarrollo de producto/ modificación
+         que tenga en cuenta riesgos y patentes y que demuestre que todos los productos nuevos y existentes
+         están diseñados para cumplir con los requisitos legales. Los cambios legales, por ejemplo de
+         ingredientes, etc., que obliguen a modificar los productos y/o estén sujetos a plazos, se coordinarán
+         con los clientes lo antes posible.
+
+4.3.2.2  El proceso de desarrollo/ modificación del proceso dará lugar a especificaciones sobre la formulación,       PARTE 2
+         requisitos de envasado, procesos de fabricación y parámetros de proceso relacionados con el
+         cumplimiento de los requisitos del producto.
+         El progreso y los resultados del desarrollo del producto se registrarán adecuadamente y deberán
+         garantizarse mediante controles como:
+
+         • pruebas en fábrica,
+
+         • pruebas de rendimiento,
+
+         • pruebas de estabilidad,
+
+         • ensayos organolépticos,
+
+         • pruebas del producto,
+
+         • pruebas de compatibilidad.
+
+4.3.2.3 Sin la autorización del propietario de la patente, la compañía no utilizará materias primas,
+           composición, o procesos de produccción que ya estén patentados.
+
+4.3.2.4  Cuando sea relevante, se realizarán pruebas de vida útil/ estabilidad teniendo en cuenta la formulación
+         de producto, envasado, fabricación y condiciones de almacenamiento. La vida útil (p. ej. fecha de
+         caducidad, PAO) de los productos etiquetados se calculará en consecuencia, desde la fecha de
+         producción original. Cuando sea relevante para productos con vida útil, se harán pruebas al final
+         de la vida útil en muestras retenidas.
+
+4.3.2.5 Donde se necesiten pruebas específicas, se dispondrá de los equipos pertinentes (como dosificación
+           para ingredientes regulados, conservantes, biocidas, etc). En el caso de que estas pruebas no se
+           realicen in situ, los resultados de las pruebas externas estarán disponibles.
+
+4.3.2.6 Las declaraciones estarán apoyadas por evidencia científica (p. ej. formulación de protectores solares,
+           detergentes, etc.), para asegurar que el producto cumple con las alegaciones declaradas.
+
+4.3.2.7 Cuando proceda, se dispondrá de equipo(s) piloto y se utilizará(n) para garantizar la posible
+           ampliación.
+
+4.3.2.8 Las recomendaciones/instrucciones de aplicación y/o uso de los productos deberán validarse y
+           documentarse, cuando proceda.
+
+                                                                     IFS HPC VERSIÓN 3                            65
+    4.3.2.9 El producto final estará diseñado y etiquetado para evitar usos no previstos y así proteger la seguridad
+               del usuario potencial. La evaluación del riesgo tratará este tema.
+
+    4.3.2.10 En base al riesgo, la compañía comprobará y verificará la idoneidad y la interacción entre el producto
+               y el envase en contacto directo y previsto o que se espera que esté en contacto directo, y tendrá
+               en cuenta:
+               • características físicas y funcionales,
+               • características organolépticas (si procede),
+               • parámetros microbiológicos y químicos (por ejemplo, resultados de las pruebas de
+                  migración).
+
+    4.4 Compras
+
+    4.4.1 Los materiales adquiridos se evaluarán en base al riesgo y estado de los proveedores, en cuanto a
+               la seguridad del producto, la legalidad y la calidad. Los resultados serán la base de los planes de
+               ensayo y seguimiento.
+
+    4.4.2 En base al riesgo, se evaluarán los servicios de compra que tienen un impacto en la seguridad y
+               calidad del producto, para garantizar que cumplen con los requisitos definidos.
+               Esto tendrá en cuentacomo mínimo:
+               • los requisitos de servicio definidos,
+               • estado del proveedor (según su evaluación),
+               • el impacto del servicio en los productos finales.
+
+    4.4.3 Se documentará, implementará y mantendrá un procedimiento para adquisición de materias primas,
+               productos semi-acabados y materiales de envasado, así como la aprobación y seguimiento de
+               proveedores (internos y externos). Este procedimiento incluirá como mínimo:
+               • materias primas y/o riesgos de los proveedores,
+               • estándares de desempeño requeridos (por ejemplo, certificación, origen, etc.),
+               • situaciones excepcionales (p. ej., compra de emergencia),
+               y, en base al riesgo criterios adicionales, por ejemplo:
+               • auditorías realizadas por una persona experimentada y competente,
+               • resultados de pruebas,
+               • fiabilidad del proveedor,
+               • reclamaciones,
+               • cuestionario del proveedor.
+
+    4.4.4 Cuando una compañía subcontrate una parte de la producción y/o el envasado primario y/o el
+               etiquetado del producto, la compañía deberá documentarlo en el sistema de gestión de seguridad
+               del producto y calidad, y asegurarse el control sobre dichos procesos para garantizar que la seguridad
+               y calidad del producto no se ven afectadas.
+
+    4.4.5 Cuando el cliente lo requiera, habrá evidencias de que este ha sido informado y ha aceptado dicho
+               proceso subcontratado.
+
+66  IFS HPC VERSIÓN 3
+4.4.6 Se documentará e implementará un acuerdo escrito que abarque los procesos subcontratados y                      PARTE 2
+           que describa cualquier acuerdo que se haga en relación con ellos, incluidos los controles en proceso,
+           el muestreo y los análisis.
+
+4.4.7 Los proveedores de los procesos subcontratados serán aprobados a través de:
+           • certificación IFS HPC o equivalente,
+
+           o
+           • auditoría documentada al proveedor, realizada por una persona experimentada y
+
+              competente, que incluirá, como mínimo, requisitos de seguridad del producto, calidad, y
+              legalidad,
+
+           o
+           • en el caso de una marca privada (por ejemplo, la marca del distribuidor), el cliente está acep-
+
+              tando expresamente otras condiciones.
+
+4.4.8 La compañía comprobará los productos de su subcontratista en la recepción, basándose en un plan
+           de muestreo documentado.
+
+4.4.9 La adquisición de materiales y las evaluaciones de proveedores se revisarán al menos una vez dentro
+           de un período de 12 meses o siempre que se produzcan cambios significativos. Deberán existir
+           registros documentados de dicha revisión y de las acciones tomadas como consecuencia de la
+           auditoría.
+
+4.5 Exterior de la fábrica
+
+4.5.1*  Se investigarán los posibles efectos adversos procedentes del entorno de la fábrica (por ejemplo,
+        tierra, aire), que puedan tener un impacto en la seguridad y calidad del producto. Cuando se hayan
+        identificado riesgos, se documentarán, implementarán y revisarán las medidas para comprobar su
+        eficacia (por ejemplo, aire extremadamente polvoriento, olores fuertes), al menos una vez en un
+        período de 12 meses o siempre que se produzcan cambios significativos.
+
+4.5.2 El exterior de la fábrica deberá estar limpio, ordenado y mantenerse en buenas condiciones.
+
+4.5.3 Todas las áreas externas de la fábrica deben estar limpias, ordenadas, diseñadas y mantenidas de
+           manera que se evite la contaminación. Donde el drenaje natural sea inadecuado, se instalará un
+           equipo de desagüe apropiado.
+
+4.6 Distribución de la planta y flujo del proceso
+
+4.6.1 Se documentará y mantendrá un plano del emplazamiento que cubra todos los edificios de las
+           instalaciones y describirá como mínimo, el flujo de proceso de:
+           • productos finales,
+           • materiales de envasado,
+           • materias primas,
+           • productos semi-acabados incluido el reproceso,
+           • residuos,
+           • personal,
+           • agua.
+
+                                                   IFS HPC VERSIÓN 3                                              67
+    4.6.2 El flujo del proceso desde la recepción de mercancías hasta la expedición, deberá implementarse,
+               mantenerse y revisarse caundo sea necesario, modificado para garantizar que se eviten riesgos de
+               contaminación microbiológica, química y física de las materias primas, material de envasado,
+               productos semi-acabados, reproceso y productos finales. Los riesgos de contaminación cruzada se
+               minimizarán mediante medidas eficaces.
+
+    4.6.3 Cuando sea relevante, los productos no se fabricarán, almacenarán ni empaquetarán usando los
+               mismos equipos que se usan para productos con otros usos previstos, a menos que exista evidencia
+               de que no hay efectos negativos en los productos.
+
+    4.6.4 En base al riesgo, áreas sensibles identificadas con peligros microbiológicos, químicos y físicos se
+               diseñarán y operarán para garantizar que la seguridad del producto no se vea comprometida.
+
+    4.6.5*   Cuando sea relevante para laboratorios:
+             • la ubicación de los laboratorios en la fábrica no afectará a la seguridad del producto,
+             • los laboratorios microbiológicos estarán separados físicamente de los laboratorios químicos.
+
+    4.7 Locales de producción y almacenamiento
+
+    4.7.1 Requisitos constructivos
+
+    4.7.1.1  Todos los edificios utilizados para la fabricación o almacenamiento de productos estarán diseñados,
+             construidos y mantenidos de manera que permitan una estructura despejada, de fácil mantenimiento,
+             con control de plagas eficiente, y de fácil limpieza del equipamiento, así como el cumplimiento de
+             la legislación relevante.
+
+    4.7.1.2 Las áreas donde se preparen, traten, procesen y almacenen productos estarán diseñadas y construidas
+               de forma que se garantice la seguridad y calidad del producto.
+
+    4.7.2 Paredes
+
+    4.7.2.1 Las paredes serán construidas para cumplir con los requisitos de producción de manera que se
+               evite la contaminación, se reduzca la condensación y el crecimiento de moho, se facilite la limpieza.
+
+    4.7.2.2 Las superficies de las paredes deberán mantenerse de manera que se evite la contaminación y sean
+               fáciles de limpiar. En base al riesgo, deberán ser impermeables y resistentes al desgaste para
+               minimizar los riesgos de contaminación del producto.
+
+    4.7.3 Suelos
+
+    4.7.3.1 Los suelos deberán ser fáciles de limpiar y estar diseñados y construidos para cumplir los requisitos
+               de producción (por ejemplo, cargas mecánicas, materiales de limpieza, etc.).
+
+68  IFS HPC VERSIÓN 3
+4.7.4 Techos/ Estructuras elevadas
+
+4.7.4.1  Los techos (o, cuando no haya techos, la cara interior de los tejados) y las estructuras elevadas
+         (incluyendo tuberías, cableado lámparas, etc.) se diseñarány mantendrán de tal forma que se
+         minimice la acumulación de suciedad y condensación, y no deberán suponer riesgo alguno de
+         contaminación física y/o microbiológica.
+
+4.7.4.2 Cuando existan falsos techos, deberá ser posible el acceso a la zona libre para facilitar la limpieza,
+           el mantenimiento y las inspecciones para el control de plagas.
+
+4.7.5 Ventanas y otras aberturas                                                                                    PARTE 2
+
+4.7.5.1 Las ventanas y otras aberturas se diseñarán y construirán de manera que se evite la acumulación
+           de suciedad y se mantendrán de forma que se evite la contaminación.
+
+4.7.5.2 Cuando haya riesgo de contaminación las ventanas y claraboyas permanecerán cerradas y aseguradas
+           durante la producción.
+
+4.7.5.3 Cuando el diseño de las ventanas y las claraboyas permita mantenerlas abiertas con el fin de ventilar,
+           éstas deberán sellarse con barreras antiplagas fáciles de limpiar u otras medidas con objeto de
+           evitar una contaminación.
+
+4.7.6 Puertas y accesos
+
+4.7.6.1 Las puertas y accesos deben mantenerse de manera que se evite la contaminación y sean fáciles
+           de limpiar. En base al riesgo se construirán para evitar:
+           • partes astilladas,
+           • pintura desconchada,
+           • corrosión.
+
+4.7.6.2 Las cortinas de tiras de plástico que separen zonas internas deberán mantenerse en buen estado
+           y ser fáciles de limpiar.
+
+4.7.7 Sistema de drenaje
+
+4.7.7.1 Los sistemas de desagüe deberán ser fáciles de limpiar y estar diseñados para minimizar el riesgo
+           de contaminación del producto (por ejemplo, entrada de plagas, áreas sensibles a la transmisión
+           de olores o contaminantes). Se asegurará una eliminación higiénica de las aguas residuales.
+
+4.7.7.2 El agua u otros líquidos alcanzarán los desagües utilizando medidas adecuadas sin dificultad. Se
+           evitará la formación de charcos.
+
+                                    IFS HPC VERSIÓN 3                                                           69
+    4.7.8 Iluminación
+
+    4.7.8.1 Todas las zonas de trabajo deberán disponer de los niveles de iluminación acordes con las actividades
+               desarrolladas.
+
+    4.7.8.2 En base al riesgo , se protegerán todos los equipos de iluminación y las trampas eléctricas para
+               moscas.
+               Áreas de la fábrica donde se aplica esto:
+               • manipulación de productos no envasados y materias primas,
+               • almacenamiento de materias primas incluyendo materiales de envasado,
+               • vestuarios.
+               Esto no significa que en otras áreas no pueda haber equipos de iluminación o trampas eléctricas
+               para moscas protegidos.
+
+    4.7.9 Aire condicionado/ Ventilación
+
+    4.7.9.1 En todas las zonas deberá existir ventilación natural y/o artificial que cubra las necesidades del
+               proceso/producto.
+
+    4.7.9.2 Si se instala un equipo de ventilación, los filtros y otros componentes deberán ser fácilmente
+               accesibles, y deberán ser comprobados, limpiados, o reemplazados, siempre que sea necesario.
+
+    4.7.9.3 Los equipos de aire acondicionado y el caudal de aire generado artificialmente no deberán suponer
+               ningún riesgo para la seguridad y la calidad del producto.
+
+    4.7.9.4 Se diseñará, construirá y mantendrá un equipo de extracción de polvo en aquellas áreas en las que
+               se genere una considerable cantidad de polvo.
+
+    4.7.10 Agua
+
+    4.7.10.1* Deberá existir un programa de control del agua que cubra todas las aguas de proceso (por ejemplo,
+               el agua utilizada en las instalaciones, para actividades de limpieza, utilizada como ingrediente, etc.).
+               Las pruebas de todas las aguas de proceso incorporarán como mínimo:
+               • especificaciones químicas, físicas y microbiológicas,
+               • frecuencia,
+               • método de tratamiento del agua en función de las necesidades del producto (por ejemplo,
+                  desionización, destilación, etc.).
+               Se prestará especial atención después de periodos sin consumo de agua (por ejemplo, después
+               de un fin de semana o de vacaciones) y cuando no pueda evitarse el estancamiento del agua.
+               La evaluación del riesgo tratará este tema.
+
+    4.7.10.2 Un programa de control del agua deberá verificar que el tratamiento del agua es adecuado y eficaz
+               según un plan de muestreo basado en el riesgo.
+
+    4.7.10.3 El agua reciclada que se use en el proceso no supondrá un riesgo de contaminación. Se dispondrá
+               de registros de esta vigilancia.
+
+70  IFS HPC VERSIÓN 3
+4.7.10.4 Si procede, las distintas calidades de agua de proceso deberán distinguirse claramente en todo el
+           emplazamiento y no deberán suponer un riesgo de contaminación.
+
+4.7.11 Aire comprimido
+
+4.7.11.1 La calidad del aire comprimido que entre en contacto directo con los productos o material de
+           envasado que esté destinado a entrar en contacto con el producestará vigilado en base al riesgo.
+           El aire comprimido no supondrá un riesgo de contaminación.
+
+4.8 Limpieza y desinfección                                                                                        PARTE 2
+
+4.8.1 Se validarán, documentarán e implementarán los programas de limpieza y desinfección en base al
+           riesgo. Estos deberán especificar:
+           • objetivos,
+           • responsabilidades,
+           • productos utilizados y sus instrucciones de uso,
+           • métodos de limpieza (incluida la dosificación de los productos químicos de limpieza y
+              desinfección),
+           • las áreas y los horarios para las actividades de limpieza y desinfección,
+           • requisitos de documentación,
+           • criterios de limpieza in situ (CIP), si procede,
+           • símbolos de peligro (si fuera necesario).
+
+4.8.2 Los métodos de control definidos deberán documentarse y aplicarse adecuadamente. Deberán
+           estar disponibles los registros de vigilancia de la limpieza y desinfección.
+
+4.8.3 Se implementarán y documentarán actividades de limpieza y desinfección que darán lugar a una
+           limpieza efectiva de las instalaciones y los equipos.
+
+4.8.4 Solo el personal competente realizará actividades de limpieza y desinfección. El personal será
+           formado regularmente con respecto a la aplicación de los programas de limpieza.
+
+4.8.5 Se verificará la eficacia de las medidas de limpieza y desinfección. La verificación se basará en un
+           programa de muestreo basado en el riesgo y considerará una o varias acciones, por ejemplo:
+           • inspección visual,
+           • muestreo rápido,
+           • métodos de control analítico.
+           Las acciones resultantes deberán ser documentadas.
+
+4.8.6 Las medidas de limpieza y desinfección se revisarán y modificarán según cualquier cambio en las
+           circunstancias (p. ej. reconstrucción, nuevas máquinas, nuevos productos, cambios de temperatura,
+           etc.). Los programas de limpieza y desinfección se ajustarán si es necesario.
+
+4.8.7 Ediciones vigentes de las fichas de seguridad (SDS) e instrucciones de uso de los productos de
+           limpieza y desinfectantes estarán siempre disponibles in situ. El personal responsable de efectuar
+           la limpieza y desinfección deberá ser capaz de demostrar conocimiento de dichas instrucciones.
+
+IFS HPC VERSIÓN 3                                                                                              71
+    4.8.8 Los productos químicos y utensilios de limpieza deberán estar claramente identificados, utilizados
+               de forma adecuada y almacenados correctamente para evitar contaminación.
+
+    4.8.9 Si aplica, la limpieza de los instrumentos de producción se realizará en ubicaciones específicas o
+               en períodos de tiempo específicos separados del proceso de producción. Si esto no es posible, estas
+               operaciones estarán controladas para no afectar a la seguridad y calidad del producto.
+
+    4.8.10 Cuando una compañía contrate a un proveedor de servicios externo para actividades de limpieza
+               y desinfección en las zonas de fabricación, todos los requisitos mencionados arriba deberán estar
+               documentados en el contrato correspondiente.
+
+    4.9 Gestión de residuos
+
+    4.9.1 Se documentará, implementará y mantendrá un procedimiento de gestión de residuos para evitar
+               la contaminación cruzada.
+
+    4.9.2 Se respetarán todos los requisitos legales locales vigentes para la gestión de residuos.
+
+    4.9.3 Los residuos de productos y de cualquier otro tipo se retirarán lo antes posible de las áreas en las
+               que se manipulen productos. En cualquier casose evitará la acumulación de residuos.
+
+    4.9.4 Las zonas de recogida de residuos y los contenedores de residuos (incluidos los compactadores)
+               deberán mantenerse ordenados, limpios para minimizar la atracción de plagas y, cuando sea
+               necesario, desinfectados. Los contenedores de residuos deberán estar claramente señalizados,
+               convenientemente diseñados y en buen estado de conservación.
+
+    4.9.5 Los residuos se recogerán en diferentes contenedores en función del tipo de gestión prevista para
+               los mismos. 
+               Los residuos serán eliminados solo por terceros autorizados. La compañía conservará los registros
+               de la eliminación de residuos. Cuando sea posible, se realizará una destrucción de residuos para
+               evitar la reutilización de productos no válidos.
+
+    4.10 Mitigación del riesgo de material extraño
+
+    4.10.1  Los productos que están siendo procesados estarán protegidos contra la contaminación física, lo
+            cual incluye pero no se limita a:
+            • contaminantes del ambiente,
+            • aceites o líquidos que goteen de la maquinaria,
+            • derrames de polvo.
+
+            También se prestará especial atención a los riesgos de contaminación del producto causados por:
+            • equipos y utensilios,
+            • tuberías,
+            • pasarelas,
+            • plataformas,
+            • escaleras.
+
+72  IFS HPC VERSIÓN 3
+        Si, debido a las características y/o necesidades tecnológicas no es posible proteger los productos,
+        se implementarán medidas de control adecuadas.
+
+4.10.2* En base al riesgo se documentarán, implementarán y mantendrán procedimientos para evitar la
+           contaminación con materiales extraños.
+
+4.10.3 En las zonas donde se manipulen materias primas, productos semi-acabados y finalesse evitará el
+           uso de madera. Cuando no pueda evitarse la presencia de madera, los riesgos deberán controlarse
+           y la madera deberá estar limpia y no plantear riesgos para la seguridad del producto.
+
+4.10.4  Cuando se requieran detectores de metales y/o de otros materiales extraños, deberán estar instalados
+        de forma que garanticen una máxima eficiencia de detección para prevenir la contaminación
+        posterior. Los detectores deben someterse a mantenimiento para evitar el mal funcionamiento al
+        menos una vez dentro de un período de 12 meses, o siempre que se produzcan cambios significativos.
+
+4.10.5  Deberá especificarse la precisión adecuada de todos los equipos y métodos diseñados para detectar          PARTE 2
+        y/o eliminar materiales extraños. Las pruebas de funcionamiento de dichos equipos y métodos se
+        llevarán a cabo al menos al inicio y al final de la producción, así como en cada cambio de producto.
+        En caso de mal funcionamiento o fallo, se evaluará el impacto en los productos y procesos.
+
+4.10.6 Los productos potencialmente contaminados deberán ser aislados. El acceso a estos productos
+           aislados y las acciones de manipulación o comprobación posteriores serán realizados sólo por
+           personal autorizado según los procedimientos establecidos.
+
+4.10.7  Deberá implementarse un procedimiento para la gestión del vidrio y materiales quebradizos
+        teniendo en cuenta acciones preventivas y acciones correctivas; el procedimeitno incluirá referencia
+        las medidas a tomar en caso de rotura de vidrio y/o material quebradizo. Cuando una evaluación
+        del riesgo identifique una contaminación potencial del producto, no se permitirá el uso de materiales
+        quebradizos (incluyendo vidrio), y, si esto no es posible, el riesgo deberá estar controlado.
+
+4.11 Vigilancia y control de plagas
+
+4.11.1* Se documentarán, implementarán y mantendrán las medidas de control de plagas en base al riesgo.
+           Deberán cumplir los requisitos legales locales y tener en cuenta, como mínimo:
+           • entorno de la fábrica (plagas potenciales y específicas),
+           • tipos de materias primas / productos finales,
+           • plano de la instalación con puntos de aplicación (plano de cebos),
+           • diseños de construcción susceptibles para la actividad de plagas, como techos, bodegas,
+              tuberías, esquinas,
+           • identificación de los cebos en la instalación,
+           • responsabilidades internas / externas,
+           • agentes utilizados y sus instrucciones de uso y seguridad,
+           • frecuencia de las inspecciones,
+           • almacenamiento alquilado, si aplica.
+
+4.11.2 Las inspecciones de control de plagas y las acciones resultantes estarán documentadas. 
+           Se vigilará y registrará la implantación de las acciones. Ante cualquier infestación, ésta deberá
+           documentarse y deberán emprenderse medidas de control.
+
+        IFS HPC VERSIÓN 3                                                                                      73
+    4.11.3 Los cebos, las trampas y los equipos de exterminación de insectos deben funcionar correctamente,
+               encontrarse en cantidad suficiente, estar diseñados para dicho propósito, estar situados en una
+               localización adecuada, y utilizarse de modo que se evite cualquier contaminación.
+
+    4.11.4 A la recepción de productos, éstas serán objeto de un control minucioso para verificar la ausencia
+               de plagas. Cualquier hallazgo deberá documentarse.
+
+    4.11.5 En base al riesgo, la puertas externas estarán diseñadas para evitar la entrada de plagas; si es posible
+               tendrán cierre automático.
+
+    4.11.6 Se vigilará la eficacia de las medidas de control de plagas, incluido el análisis de tendencias, para
+               permitir acciones adecuadas. Se dispondrá de registros de esta vigilancia.
+
+    4.11.7  Cuando una compañía contrate a un proveedor de servicios externo todos los requisitos especificados
+            anteriormente se documentarán en el contrato de servicio. Se nombrará a una persona de la
+            compañía para que supervise las actividades de control de plagas. Incluso si el servicio de control
+            de plagas es subcontratado, las responsabilidades de las acciones necesarias (incluida la supervisión
+            continua de las actividades de control de plagas) seguirán siendo de la propia compañía.
+
+    4.12 Recepción y almacenamiento de mercancías
+
+    4.12.1  Se comprobará la conformidad de todos los productos entrantes incluyendo material de envasado
+            y etiquetas, según las especificaciones y un plan de inspección definido en base al riesgo. El plan
+            de inspección deberá estar justificado por la evaluación del riesgo. Los registros de dichas
+            inspecciones deberán estar disponibles.
+
+    4.12.2  Se implementará y mentendrá un sistema para garantizar las condiciones de almacenamiento de
+            las materias primas incluyendo materiales de envasado, productos semi-acabados y productos
+            finales se corresponden con las especificaciones del producto y no tendrán un impacto negativo
+            en otros productos.
+
+    4.12.3 Se deberá minimizar el almacenamiento en el exterior. Si se almacenan mercancías en el exterior,
+               se deberá garantizar de que no hay riesgos de contaminación o efectos adversos sobre la seguridad
+               del producto y la calidad.
+
+    4.12.4 Cuando las materias primas incluyendo materiales de envasado se re-empaqueten, la nueva etiqueta
+               debe contener la información relevante al igual que en la etiqueta original.
+
+    4.12.5 Todos los productos deberán estar identificados. El uso de productos se realizará según los principios
+               de First In / First Out (primero que entra / primero que sale) o First Expired / First Out (primero que
+               caduca / primero que sale), en consonancia con las mejores prácticas relevantes de la industria.
+
+    4.12.6 Se realizará un inventario regularmente para asegurar la fiabilidad de las existencias. Cualquier
+               discrepancia significativa será investigada y se emprenderán acciones correctivas.
+
+    4.12.7  Cuando una compañía contrate a un proveedor externo de almacenamiento éste estará sujeto a
+            los requisitos de IFS Logistics. Si dicho proveedor no está certificado según IFS Logistics, se cumplirán
+            todos los requisitos relevantes equivalentes a las propias prácticas de almacenamiento de la
+            compañía, y éstos estarán claramente definidos en el contrato correspondiente.
+
+74  IFS HPC VERSIÓN 3
+4.13 Transporte
+
+4.13.1  Los vehículos utilizados para el transporte de mercancías deberán estar en buen estado y proteger
+        los productos de las condiciones climáticas adversas y de las influencias externas. Las condiciones
+        en el interior del vehículo, por ejemplo:
+        • ausencia de olores extraños,
+        • carga de polvo excesiva,
+        • humedad desfavorable,
+        • plagas,
+        • mohos,
+        • integridad del vehículo,
+
+        se comprobarán antes de la carga y se documentarán para garantizar el cumplimiento de las
+        condiciones especificadas.
+
+4.13.2 Se documentarán, implementarán y mantendrán procedimientos para prevenir la contaminación                 PARTE 2
+           durante el transporte (incluido el transporte interno) incluyendo la carga y la descarga.
+
+4.13.3 Se implementarán requisitos higiénicos en base al riesgo para todos los vehículos de transporte y
+           equipos utilizados para la carga / descarga (como por ejemplo, mangueras en instalaciones con
+           silo). Habrá registros de las acciones emprendidas.
+
+4.13.4 Las áreas de carga y descarga tendrán equipos para proteger los productos transportados de
+           influencias externas.
+
+4.13.5  Cuando la compañía contrate los servicios de transporte de un tercero, todos los requisitos
+        especificados en la sección 4.13 quedarán recogidos con claridad en el contrato correspondiente,
+        o el proveedor externo deberá estar certificado de acuerdo con los requisitos de IFS Logistics o
+        normas equivalentes.
+
+4.14 Mantenimiento y reparaciones
+
+4.14.1  Deberá documentarse, implantarse, mantenerse y documentarse un plan de mantenimiento
+        adecuado, que cubra todos los equipos críticos (incluyendo el transporte) para cumplir con los
+        requisitos del producto. Esto será de aplicación tanto para actividades de mantenimiento internas
+        como para los proveedores de servicios. El plan deberá incluir responsabilidades, prioridades y
+        fechas límite.
+
+4.14.2  Durante la ejecución de los trabajos de mantenimiento y reparaciones y después de ellos, se
+        asegurará la prevención de contaminación y la conformidad con los requisitos del producto. Se
+        mantendrán registros de mantenimiento y reparaciones, así como de las acciones correctivas
+        adoptadas.
+
+4.14.3 Todo el material utilizado en los trabajos de mantenimiento y reparación será adecuado para el uso
+           previsto y no deberá suponer riesgos de contaminación.
+
+4.14.4 Se identificarán, documentarán y revisarán las averías y fallos funcionales que se produzcan en las
+           instalaciones y los equipos esenciales para la seguridad del producto y la calidad (incluyendo
+           transporte), para así tomar acciones inmediatas y mejorar el plan de mantenimiento.
+
+                                   IFS HPC VERSIÓN 3                                                         75
+    4.14.5  Las reparaciones temporales se llevarán a cabo de manera que no se vean afectados los requisitos
+            del producto.Las reparaciones temporales se llevarán a cabo de manera que no se vean afectados
+            los requisitos del producto. Se documentarán estos trabajos y se establecerá un plazo breve para
+            la corrección de la avería.
+
+    4.14.6 Cuando una compañía contrate los servicios de mantenimiento y reparación a un tercero, se definirán,
+               documentarán y mantendrán todos los requisitos de la compañía relativos a materiales, equipamientos
+               y normas operativas en el contrato de servicios, para prevenir cualquier contaminación del producto.
+
+    4.15 Equipo
+
+    4.15.1 Los equipos estarán adecuadamente diseñados y sus características definidas para el uso previsto.
+               Antes de su puesta en servicio se verificará que se cumplen los requisitos del producto. Materiales
+               consumibles usados para los equipos no afectarán a la seguridad y calidad del producto.
+
+    4.15.2 Cuando sea relevante para la seguridad del producto, deberán existir pruebas de conformidad que
+               demuestren que los equipos, utensilios y otros materiales en contacto con el producto son adecuados
+               para el uso previsto.
+
+    4.15.3 Los equipos deberán estar ubicados de modo que se permita realizar de manera eficaz las operaciones
+               de limpieza, desinfección y mantenimiento.
+
+    4.16 Trazabilidad
+
+    4.16.1* KO N° 4 :  Se documentará, implementará y mantendrá un sistema de trazabilidad que permitirá
+               la identificación de lotes de productos y su relación con materias primas, envasado en contacto
+               directo con producto y envasado que se prevé o espera que esté en contacto directo con el
+               producto. El sistema de trazabilidad incluirá todos los registros correspondientes de:
+               • recepción,
+               • procesando en todos los pasos,
+               • uso de reprocesos,
+               • distribución.
+
+               La trazabilidad debe estar garantizada en todas las etapas y documentada hasta la entrega
+               al cliente.
+
+    4.16.2 La compañía debe asegurarse de que el envase y la etiqueta utilizados corresponden al producto
+               que está siendo envasado, y que cumplen con las especificaciones de producto acordadas con el
+               cliente. Esto deberá comprobarse con regularidad y dichas comprobaciones deben ser documentadas.
+
+    4.16.3  El sistema de trazabilidad se probará al menos una vez dentro de un período de 12 meses o siempre
+            que se produzcan cambios significativos. Las muestras para la comprobación reflejará la complejidad
+            de la gama de productos de la compañía. Los registros de la comprobación deberán demostrar la
+            trazabilidad hacia atrás y hacia delante (desde los productos expedidos hasta la materia prima y
+            viceversa). La trazabilidad de los productos finales se realizará en un máximo de cuatro (4) horas.
+
+    4.16.4 Será posible identificar en todo momento los equipos usados en la producción del producto final
+               (contenedores de materias primas y de productos semi-acabados, mezcladores, líneas de llenado,
+               etc.).
+
+76  IFS HPC VERSIÓN 3
+4.16.5  Si es requerido pr el cliente y/o legislación, se guardarán apropiadamente muestras representativas
+        identificadas del lote de fabricación y se conservarán hasta la fecha de caducidad del producto final
+        y, si es necesario, durante un período determinado después de esta fecha. 
+        Para productos sin vida útil, el tiempo de conservación de registros e información documentada
+        se justificará y dicha justificación deberá quedar documentada.
+
+4.17 Mitigación del riesgo de alérgenos
+
+4.17.1  Deberá disponerse de información sobre los alérgenos que requieran declaración. La compañía
+        mantendrá una lista actualizada permanentemente de todas las materias primas que contengan
+        alérgenos que se utilicen en sus instalaciones, en la que también se harán constar todas las mezclas
+        y fórmulas a las que se incorporen materias primas que contengan alérgenos.
+
+4.17.2* Se mantendrán medidas basadas en el riesgo desde la recepción hasta la expedición, para asegurar           PARTE 2
+           que la contaminación cruzada potencial debida a alérgenos se minimiza. Los riesgos potenciales
+           de contaminación cruzada considerarán como mínimo:
+           • ambiente,
+           • transporte y almacenamiento,
+           • materias primas,
+           • precursores de alérgenos,
+           • procesos de producción,
+
+           Se controlarán las medidas aplicadas.
+
+4.17.3 Los productos finales que contengan alérgenos que requieran ser declarados se declararán de
+           acuerdo con los requisitos legales y/o de cliente.
+
+4.18 Defensa del producto
+
+4.18.1  Se implementaun procedimiento y un plan de defensa del producto en relación con las amenazas
+        evaluadas. Esto incluirá como mínimo:
+        • identificación de áreas críticas y/o prácticas y política de acceso para empleados,
+        • vehículos de transporte,
+        • IT,
+        • requisitos legales, si procede,
+        • cualquier otra medida de control.
+
+        El plan de defensa del producto deberá ser bien conocido y estar establecido en la compañía, y
+        se revisará anualmente y cuando se produzcan cambios.
+
+4.18.2 Se definirán las responsabilidades en materia de defensa del producto. La(s) persona(s) responsable(s)
+           deberán tener pleno compromiso de la dirección.
+
+                                         IFS HPC VERSIÓN 3                                                     77
+    5 Mediciones, análisis, mejoras
+
+    5.1 Auditorías internas
+
+    5.1.1 Deberá documentarse, aplicarse y mantenerse un programa eficaz de auditoría interna que garantice
+               la evaluación de todos los requisitos de la Norma IFS en un período de 12 meses y cuya ejecución
+               no supere los 15 meses. La compañía deberá llevar a cabo una evaluación del riesgo en la que las
+               actividades que son críticas para la seguridad del producto y la calidad se auditen con mayor
+               frecuencia. Esto también es aplicable a localizaciones de almacenamiento propias o subcontratadas
+               por la compañía fuera del emplazamiento.
+
+    5.1.2 Los auditores serán competentes e independientes del departamento auditado.
+
+    5.1.3 Las auditorías internas estarán documentadas y los resultados serán comunicados a la dirección y
+               a las personas responsables de los departamentos afectados. Los cumplimientos, desviaciones e
+               inconformidades se documentarán y comunicarán a las personas pertinentes.
+
+    5.2 Inspecciones en la fábrica
+
+    5.2.1 Se planificarán y se llevarán a cabo inspecciones en la fábrica para ciertos aspectos como por
+               ejemplo:
+               • estado de las construcciones de los locales de producción y almacenamiento,
+               • áreas externas,
+               • control del producto durante el procesado,
+               • higiene durante el procesado y dentro de la infraestructura,
+               • peligros por materiales extraños,
+               • higiene personal.
+               La frecuencia de las inspecciones será en base al riesgo y en el histórico de resultados previos.
+
+    5.3 Validación y control del proceso
+
+    5.3.1 Se definirán los criterios de validación y control de procesos. Los parámetros del proceso (temperatura,
+               tiempo, presión, propiedades químicas, etc.) que son esenciales para garantizar la seguridad del
+               producto y la calidad se controlarán, registrarán continuamente y/o a intervalos adecuados y se
+               asegurarán contra el acceso no autorizado y/o el cambio.
+
+    5.3.2 Las operaciones de procesado se realizaran de acuerdo con la documentación de control del
+               procesado e incluirán:
+               • equipamiento adecuado,
+               • composición del producto,
+               • lista de todas las materias primas identificadas de acuerdo con los documentos relevantes
+                  indicando número de lote y cantidades,
+               • operaciones de procesado detalladas para cada etapa, como adición de materias primas,
+                  temperaturas, tiempos de mezcla, muestreo y transferencia del producto semi-acabado.
+
+               Cuando sea aplicable, se asignará un número de lote.
+
+78  IFS HPC VERSIÓN 3
+5.3.3 La compañía asegurará que en caso de cambios en métodos de procesado, equipamiento y
+           formulación de productos (incluyendo reelaboración y material de envasado), se revisarán las
+           características del proceso para asegurar que se cumplen los requisitos del producto. Si es relevante,
+           se informará a los clientes.
+
+5.3.4 Todas las operaciones de reprocesado serán validadas, vigiladas y documentadas. Estas operaciones
+           no afectarán a los requisitos de la seguridad y calidad del producto
+
+5.3.5 Los procedimientos apropiados para la rápida comunicación, registro y vigilancia del funcionamiento
+           incorrecto de los equipos y las desviaciones de los procesos estarán documentados, implementados
+           y mantenidos.
+
+5.3.6 Si ocurren modificaciones sustanciales deberá realizarse una re-validación.
+
+5.4 Calibración, ajuste y comprobación de los equipos de medición y vigilancia                                          PARTE 2
+
+5.4.1 Se identificarán y registrarán los dispositivos de medición y control necesarios para garantizar el
+           cumplimiento de los requisitos de seguridad del producto y la calidad. El estado de calibración de
+           estos equipos debe estar registrado. Si la ley lo requiere estos equipos de medición y vigilancia
+           debe estar legalmente aprobados.
+
+5.4.2 Todos los dispositivos de medición se comprobarán, controlarán, ajustarán y calibrarán a intervalos
+           definidos, de acuerdo con normas/métodos definidos y reconocidos y dentro de los límites
+           pertinentes de los valores de los parámetros del proceso. Los resultados estarán documentados.
+
+5.4.3 Todos los equipos de medida se utilizarán únicamente para su uso especificado. Cuando los resultados
+           de las mediciones o el estado del equipo indiquen un mal funcionamiento, el equipo en cuestión
+           será inmediatamente reparado o sustituido. Cuando se haya identificado un mal funcionamiento,
+           se evaluará el impacto en los procesos y productos para determinar si se han procesado productos
+           no conformes.
+
+5.5 Vigilancia del control de cantidades
+
+5.5.1*  Se implementará y mantendrá la frecuencia y metodología para el control de la cantidad con el fin
+        de cumplir con lo requisitos legales ( incluyendo los de los países de destino) y con las especificaciones
+        de los clientes.
+
+5.5.2 Se definirán los criterios de cumplimiento para controlar la cantidad de lote.
+
+5.5.3 Las comprobaciones deben estar implantadas y registradas, según un plan de muestreo que garantice
+           una adecuada representación del lote fabricado. Los resultados de estos controles cumplirán los
+           criterios definidos para todos los productos listos para ser entregados.
+
+5.6 Pruebas de producto, y control ambiental
+
+5.6.1 Existirán procedimientos que aseguren que todos los requisitos del producto especificados se
+           cumplen, incluyendo los requisitos legales, desempeño / rendimiento y especificaciones. Los
+           resultados de análisis microbiológicos, físicos y químicos necesarios para ese fin estarán disponibles.
+
+                                                                                      IFS HPC VERSIÓN 3             79
+    5.6.2 Los equipos y entorno adecuados estarán disponibles para todas las pruebas que se realicen.
+
+    5.6.3 Los análisis que sean relevantes para la seguridad del producto, calidad y legalidad, se realizarán
+               preferiblemente por laboratorios con programas/métodos acreditados (ISO/IEC 17025). Si los análisis
+               se realizan internamente o por un laboratorio sin los programas/métodos acreditados apropiados,
+               los resultados se cotejarán con los resultados de las pruebas de los laboratorios acreditados para
+               estos programas/métodos (ISO/IEC 17025) al menos una vez dentro de un período de 12 meses, o
+               siempre que se produzcan cambios significativos. La compañía deberá poder demostrar que los
+               resultados son fiables.
+
+    5.6.4 Existirá evidencia documentada que asegure la fiabilidad de los resultados de los análisis internos
+               en base a métodos analíticos reconocidos oficiales y no oficiales.
+
+    5.6.5*  Los planes analíticos y de vigilancia para análisis internos y externos deben estar basados en el
+            riesgo para así garantizar que la seguridad, calidad, legalidad, y los requisitos específicos de los
+            clientes, se cumplen. Los planes cubrirán un mínimo de:
+            • materias primas,
+            • productos semi-acabados (si procede),
+            • productos finales,
+            • materiales de envasado,
+            • superficies de contacto de los equipos de proceso,
+            • parámetros relevantes para el control ambiental.
+
+            El plan de pruebas incluirá la frecuencia de las pruebas y la tolerancia asociada a los límites de
+            especificación.
+
+    5.6.6 Los resultados de análisis serán revisados regularmente y se identificarán tendencias. Se introducirán
+               inmediatamente medidas adecuadas para cualquier resultado no satisfactorio, o cuando las
+               tendencias indiquen resultados no satisfactorios. Cuando se identifiquen tendencias insatisfactorias,
+               se evaluará el impacto en los procesos y productos, así como la necesidad de acciones.
+
+    5.6.7 Cuando sea relevante, se realizará un muestreo de materias primas y del producto a granel de forma
+               adecuada y por personal autorizado.
+
+    5.6.8 Cuando se realicen análisis o controles internos, éstos deben ser llevados a cabo de acuerdo a
+               procedimientos definidos por personal competente y aprobado,
+
+    5.6.9 Los resultados de los análisis de productos finales incluyendo material de reelaboración, serán
+               revisados por personal autorizado para verificar el cumplimiento del los criterios de aceptación por
+               parte de los productos finales y semi-acabados. Se deben tomar acciones correctivas apropiadas
+               ante la aparición de resultados no satisfactorios.
+
+    5.6.10 Para vigilar la calidad del producto final se realizarán ensayos organolépticos internos. Estos ensayos
+               se realizarán de acuerdo con las especificaciones y en relación con el impacto sobre los respectivos
+               parámetros de las características del producto. Los resultados de estas pruebas se documentarán.
+
+    5.6.11 El plan de análisis y vigilancia debe ser revisado y actualizado, en base a los resultados, cambios en
+               la legislación o aspectos que puedan tener un impacto en los requisitos del producto.
+
+    5.6.12 Los controles durante el proceso no deberán comprometer los requisitos del producto.
+
+80  IFS HPC VERSIÓN 3
+5.7 Liberación de producto
+
+5.7.1 Se documentará, implementará y mantendrá un procedimiento de cuarentena (bloqueo/retención)
+           para garantizar que solo se procesen y entreguen las materias primas, los productos semi-acabados,
+           productos finales y los materiales de envasado, que cumplan con los requisitos del producto y del
+           cliente.
+
+5.8 Gestión de las reclamaciones de autoridades y clientes
+
+5.8.1*  Se documentará, implementará y mantendrá un procedimiento para la gestión de las reclamaciones
+        sobre el producto (incluida cualquier notificación por escrito de las autoridades competentes, si
+        procede), y se tendrán en cuenta procedimientos específicos (por ejemplo, efectos indeseables).
+
+5.8.2 Todas las reclamaciones deben ser registradas, estar fácilmente disponibles y ser evaluadas por              PARTE 2
+           personal competente. Cuando esté justificado, se deben tomar acciones de manera inmediata.
+
+5.8.3 Las reclamaciones se analizarán con objeto de implementar acciones para evitar que se repita la
+           desviación y/o no conformidad.
+
+5.8.4 Los resultados del análisis de los datos de reclamaciones se pondrán a disposición de los
+           correspondientes responsables y de la dirección.
+
+5.9 Gestión de la recuperación y retirada de productos e incidencias
+
+5.9.1*  KO N° 5:  Se dispondrá de un procedimiento efectivo documentado, implantado y mantenido
+        para la gestión de recuperación, retirada, incidencias y de posibles situaciones de emergencia
+        con impacto en la seguridad del producto, calidad, y la legalidad. Deberá incluir como mínimo:
+        • la asignación de responsabilidades,
+        • la formación de las personas responsables,
+        • el proceso de toma de decisiones,
+        • la nominación de una persona autorizada por la compañía y disponible de forma
+
+           permanente, para iniciar el proceso necesario en el momento oportuno,
+        • un listado actualizado de datos de contacto, incluyendo información de los clientes,
+
+           fuentes de asesoramiento legal, disponibilidad de contactos,
+        • un plan de comunicación que incluya clientes, autoridades y, en su caso, consumidores.
+
+5.9.2 El procedimiento se someterá a pruebas internas de recuperación/retirada, abarcando el proceso
+           de principio a fin, al menos una vez en un periodo de 12 meses y su ejecución no excederá de 15
+           meses. El resultado de la prueba se revisará para una mejora continua.
+
+                                                                      IFS HPC VERSIÓN 3                        81
+    5.10 Gestión de productos no conformes
+
+    5.10.1  Se documentará, implementará y mantendrá un procedimiento para la gestión de productos no
+            conformes ya sean estos materias primas, productos semi-acabados, productos finales, equipos del
+            proceso y materiales de envasado. Esto incluirá como mínimo:
+            • responsabilidades definidas,
+            • procedimientos de segregación/cuarentena,
+            • evaluación del riesgo,
+            • identificación incluyendo etiquetado,
+            • decisión sobre el uso previsto como liberación, reproceso/postratamiento, bloqueo, cuaren-
+
+               tena, rechazo/eliminación.
+
+    5.10.2 El procedimiento para la gestión de los productos no conformes debe ser entendido y aplicado por
+               el personal pertinente.
+
+    5.10.3 Cuando se identifiquen productos no conformes se deben tomar acciones inmediatas para asegurar
+               que se cumplen con los requistos de seguridad del producto y la calidad.
+
+    5.10.4 Los productos finales (incluido el envase) que no cumplen con las especificaciones, no se
+               comercializarán con la etiqueta correspondiente, a menos que haya una aprobación por escrito del
+               propietario de la marca.
+
+    5.11 Gestión de desviaciones, no conformidades, correcciones y acciones
+             correctivas
+
+    5.11.1  Se documentará, implementará y mantendrá un procedimiento de gestión de correcciones y
+            acciones correctivas para el registro, análisis y la comunicación con las personas pertinentes, de las
+            desviaciones, no conformidades y productos no conformes, con el objeto de cerrar los no
+            cumplimientos y evitar la recurrencia de los mismos a través de correciones y/o acciones correctivas.
+            Esto incluirá un análisis de la causa raíz, al menos para las desviaciones y no conformidades
+            relacionadas con la seguridad, legalidad, y/o la recurrencia de las desviaciones y no conformidades.
+
+    5.11.2* KO N° 6:  Se formularán, ocumentarán e implementarán acciones correctivas tan pronto como
+               sea posible para evitar la reaparición de desviaciones y no conformidades. Se definirán las
+               responsabilidades y los plazos para las acciones correctivas. La documentación se guardará de
+               forma segura y fácilmente accesible.
+
+    5.11.3 Se debe evaluar la efectividad de las correcciones y acciones correctivas implementadas y se
+               documentarán los resultados de dicha evaluación.
+
+82  IFS HPC VERSIÓN 3
+

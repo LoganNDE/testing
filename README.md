@@ -38,6 +38,19 @@ Para generar una version de produccion:
 npm run build
 ```
 
+En produccion la ruta `/api` no se proxyea automaticamente como en Vite dev. Si despliegas el frontend y la API en dominios distintos, define antes de compilar:
+
+```bash
+VITE_API_BASE_URL=https://tu-api.example.com
+```
+
+Y en el servidor de API ajusta:
+
+```bash
+CORS_ORIGIN=https://tu-frontend.example.com
+API_HOST=0.0.0.0
+```
+
 Para regenerar el JSON de la norma desde el PDF original:
 
 ```bash

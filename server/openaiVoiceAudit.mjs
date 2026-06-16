@@ -1,6 +1,16 @@
 const OPENAI_BASE_URL = 'https://api.openai.com/v1';
 const DEFAULT_TRANSCRIPTION_MODEL = 'gpt-4o-transcribe';
 const DEFAULT_AUDIT_MODEL = 'gpt-5.5';
+const SUPPORTED_AUDIO_TYPES = new Map([
+  ['audio/mp4', { extension: 'm4a', type: 'audio/mp4' }],
+  ['audio/x-m4a', { extension: 'm4a', type: 'audio/mp4' }],
+  ['audio/mpeg', { extension: 'mp3', type: 'audio/mpeg' }],
+  ['audio/mp3', { extension: 'mp3', type: 'audio/mpeg' }],
+  ['audio/ogg', { extension: 'ogg', type: 'audio/ogg' }],
+  ['audio/wav', { extension: 'wav', type: 'audio/wav' }],
+  ['audio/wave', { extension: 'wav', type: 'audio/wav' }],
+  ['audio/webm', { extension: 'webm', type: 'audio/webm' }],
+]);
 
 function requiredEnv(name) {
   const value = process.env[name];
@@ -29,6 +39,17 @@ function outputTextFromResponse(responseJson) {
     }
   }
   return chunks.join('\n').trim();
+}
+
+function audioFileInfo(file) {
+  const mimeType = String(file?.type || '').split(';')[0].trim().toLowerCase();
+  return SUPPORTED_AUDIO_TYPES.get(mimeType) ?? SUPPORTED_AUDIO_TYPES.get('audio/webm');
+}
+
+async function normalizeAudioFile(file) {
+  const info = audioFileInfo(file);
+  const arrayBuffer = await file.arrayBuffer();
+  return new File([arrayBuffer], `audit-audio.${info.extension}`, { type: info.type });
 }
 
 function auditExtractionSchema() {
@@ -68,8 +89,9 @@ function auditExtractionSchema() {
 
 export async function transcribeAudio(file) {
   const apiKey = requiredEnv('OPENAI_API_KEY');
+  const normalizedFile = await normalizeAudioFile(file);
   const form = new FormData();
-  form.append('file', file, file.name || 'audit-audio.webm');
+  form.append('file', normalizedFile, normalizedFile.name);
   form.append('model', process.env.OPENAI_TRANSCRIPTION_MODEL || DEFAULT_TRANSCRIPTION_MODEL);
   form.append('language', 'es');
   form.append(

@@ -6,6 +6,7 @@ import { processVoiceAudit } from './openaiVoiceAudit.mjs';
 loadEnvFile();
 
 const port = Number(process.env.API_PORT || 8787);
+const host = process.env.API_HOST || '127.0.0.1';
 
 function sendJson(response, status, payload) {
   response.writeHead(status, {
@@ -58,6 +59,6 @@ const server = createServer(async (request, response) => {
   }
 });
 
-server.listen(port, '127.0.0.1', () => {
-  console.log(`Voice audit API listening on http://127.0.0.1:${port}`);
+server.listen(port, host, () => {
+  console.log(`Voice audit API listening on http://${host}:${port}`);
 });

@@ -42,6 +42,7 @@ interface VoiceAuditResult {
 }
 
 const STORAGE_KEY = 'ifs-hpc-audit-state-v5';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '') ?? '';
 const bundledPoints = parseStandardJson(ifsHpcStandard);
 
 const statusColors: Record<AuditStatus, string> = {
@@ -97,6 +98,21 @@ function audioFileExtension(mimeType: string): string {
   if (type === 'audio/ogg') return 'ogg';
   if (type === 'audio/wav' || type === 'audio/wave') return 'wav';
   return 'webm';
+}
+
+async function readApiError(response: Response): Promise<string> {
+  const fallback = 'No se pudo procesar la auditoria de voz.';
+  const contentType = response.headers.get('content-type') ?? '';
+  try {
+    if (contentType.includes('application/json')) {
+      const data = await response.json();
+      return data?.error || fallback;
+    }
+    const text = await response.text();
+    return text || fallback;
+  } catch {
+    return fallback;
+  }
 }
 
 function voiceResultStatus(result: VoiceAuditResult): AuditStatus {
@@ -897,12 +913,12 @@ function VoiceAuditStep({
       form.append('transcript', transcript);
       form.append('points', JSON.stringify(points));
 
-      const response = await fetch('/api/voice-audit', {
+      const response = await fetch(`${API_BASE_URL}/api/voice-audit`, {
         method: 'POST',
         body: form,
       });
+      if (!response.ok) throw new Error(await readApiError(response));
       const data = await response.json();
-      if (!response.ok) throw new Error(data.error || 'No se pudo procesar la auditoria de voz.');
       setProcessingStep(voiceProcessingMessages.length - 1);
 
       if (data.transcript) setTranscript(data.transcript);

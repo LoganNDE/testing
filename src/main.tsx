@@ -12,7 +12,13 @@ import {
   Download,
   FileJson,
   ListChecks,
+  Loader2,
+  Mic,
+  Pause,
+  Play,
   Search,
+  Sparkles,
+  Square,
   XCircle,
 } from 'lucide-react';
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
@@ -24,8 +30,16 @@ import { parseStandardJson } from './lib/standardParser';
 import type { AuditEntry, AuditMetadata, AuditStatus, StandardPoint } from './types';
 import './styles.css';
 
-type WorkflowStep = 'company' | 'scope' | 'audit';
+type WorkflowStep = 'company' | 'scope' | 'mode' | 'voice' | 'audit';
 type AppView = 'audit' | 'scope' | 'data' | 'stats';
+type AuditMode = 'manual' | 'voice';
+
+interface VoiceAuditResult {
+  point: StandardPoint;
+  patch: Partial<AuditEntry>;
+  excerpt: string;
+  confidence?: number;
+}
 
 const STORAGE_KEY = 'ifs-hpc-audit-state-v5';
 const bundledPoints = parseStandardJson(ifsHpcStandard);
@@ -39,6 +53,23 @@ const statusColors: Record<AuditStatus, string> = {
 };
 
 const smoothEase: [number, number, number, number] = [0.23, 1, 0.32, 1];
+const auditActionStatuses: AuditStatus[] = ['pass', 'fail', 'not_applicable'];
+const SpeechRecognitionCtor =
+  typeof window !== 'undefined' ? ((window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition) : null;
+const preferredAudioMimeTypes = [
+  'audio/webm;codecs=opus',
+  'audio/webm',
+  'audio/mp4;codecs=mp4a.40.2',
+  'audio/mp4',
+  'audio/ogg;codecs=opus',
+  'audio/ogg',
+];
+const voiceProcessingMessages = [
+  'Preparando audio y transcripcion',
+  'Transcribiendo la grabacion',
+  'Identificando puntos IFS HPC',
+  'Rellenando estados, detalles y comentarios',
+];
 
 const softEnter = {
   initial: { opacity: 0, transform: 'translateY(14px)' },
@@ -52,6 +83,84 @@ function pointRequirement(point: StandardPoint): string {
 
 function pointHeading(point: StandardPoint): string {
   return point.title && point.title !== point.code ? `${point.code} · ${point.title}` : point.code;
+}
+
+function supportedAudioMimeType(): string {
+  if (typeof MediaRecorder === 'undefined' || typeof MediaRecorder.isTypeSupported !== 'function') return '';
+  return preferredAudioMimeTypes.find((type) => MediaRecorder.isTypeSupported(type)) ?? '';
+}
+
+function audioFileExtension(mimeType: string): string {
+  const type = mimeType.split(';')[0].trim().toLowerCase();
+  if (type === 'audio/mp4' || type === 'audio/x-m4a') return 'm4a';
+  if (type === 'audio/mpeg' || type === 'audio/mp3') return 'mp3';
+  if (type === 'audio/ogg') return 'ogg';
+  if (type === 'audio/wav' || type === 'audio/wave') return 'wav';
+  return 'webm';
+}
+
+function voiceResultStatus(result: VoiceAuditResult): AuditStatus {
+  return result.patch.status ?? 'pass';
+}
+
+function compactPointLabel(point: StandardPoint): string {
+  const text = pointRequirement(point).replace(/\s+/g, ' ').trim();
+  return `${point.code} · ${text}`;
+}
+
+function normalizeSpeechText(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function extractField(segment: string, label: string): string {
+  const fieldPattern = new RegExp(`${label}\\s*[:,-]?\\s*([\\s\\S]*?)(?=\\b(?:comentario|datos adicionales|datos|evidencias|evidencia|accion correctiva|accion|responsable|fecha limite|punto|requisito)\\b|$)`, 'i');
+  return segment.match(fieldPattern)?.[1]?.trim() ?? '';
+}
+
+function parseVoiceAuditTranscript(transcript: string, points: StandardPoint[]): VoiceAuditResult[] {
+  const normalizedTranscript = normalizeSpeechText(transcript);
+  if (!normalizedTranscript) return [];
+
+  const codeMatches = Array.from(normalizedTranscript.matchAll(/\b\d+(?:\.\d+){0,5}\*?\b/g));
+  if (!codeMatches.length) return [];
+
+  const pointByCode = new Map(points.map((point) => [point.code.replace(/\*$/, ''), point]));
+
+  return codeMatches.flatMap((match, index) => {
+    const code = match[0].replace(/\*$/, '');
+    const point = pointByCode.get(code);
+    if (!point) return [];
+
+    const nextMatch = codeMatches[index + 1];
+    const segment = normalizedTranscript.slice(match.index, nextMatch?.index ?? normalizedTranscript.length).trim();
+    const patch: Partial<AuditEntry> = {};
+
+    if (/\bno\s+conforme\b|\bno\s+cumple\b|\bno\s+pasa\b/.test(segment)) patch.status = 'fail';
+    else if (/\bno\s+aplica\b|\bno\s+aplicable\b/.test(segment)) patch.status = 'not_applicable';
+    else if (/\bconforme\b|\bcumple\b|\bpasa\b|\bapto\b/.test(segment)) patch.status = 'pass';
+
+    const comment = extractField(segment, 'comentario');
+    const extraData = extractField(segment, 'datos adicionales|datos');
+    const evidence = extractField(segment, 'evidencias|evidencia');
+    const correctiveAction = extractField(segment, 'accion correctiva|accion');
+    const responsible = extractField(segment, 'responsable');
+    const dueDate = extractField(segment, 'fecha limite');
+
+    if (comment) patch.comment = comment;
+    if (extraData) patch.extraData = extraData;
+    if (evidence) patch.evidence = evidence;
+    if (correctiveAction) patch.correctiveAction = correctiveAction;
+    if (responsible) patch.responsible = responsible;
+    if (dueDate) patch.dueDate = dueDate;
+    if (!comment && !extraData && !evidence && !correctiveAction) patch.comment = segment.replace(new RegExp(`^${code.replace(/\./g, '\\.')}\\s*`), '').trim();
+
+    return [{ point, patch, excerpt: segment }];
+  });
 }
 
 function loadState() {
@@ -84,6 +193,8 @@ function App() {
   const [workflowStep, setWorkflowStep] = React.useState<WorkflowStep>(stored?.workflowStep ?? 'company');
   const [activeView, setActiveView] = React.useState<AppView>('audit');
   const [metadata, setMetadata] = React.useState<AuditMetadata>(stored?.metadata ?? initialMetadata());
+  const [auditMode, setAuditMode] = React.useState<AuditMode>(stored?.auditMode ?? 'manual');
+  const [voiceDraftResults, setVoiceDraftResults] = React.useState<VoiceAuditResult[]>(stored?.voiceDraftResults ?? []);
 
   const auditPoints = React.useMemo(() => {
     const selected = new Set(selectedIds);
@@ -96,8 +207,8 @@ function App() {
   const selectedIndex = selected ? auditPoints.findIndex((point) => point.id === selected.id) : -1;
 
   React.useEffect(() => {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ points, entries, selectedIds, selectedId, metadata, workflowStep }));
-  }, [points, entries, selectedIds, selectedId, metadata, workflowStep]);
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({ points, entries, selectedIds, selectedId, metadata, workflowStep, auditMode, voiceDraftResults }));
+  }, [points, entries, selectedIds, selectedId, metadata, workflowStep, auditMode, voiceDraftResults]);
 
   React.useEffect(() => {
     if (!auditPoints.length) return;
@@ -113,8 +224,8 @@ function App() {
   });
 
   const chartData = [
-    { name: 'Pasa', value: summary.passed, color: statusColors.pass },
-    { name: 'No pasa', value: summary.failed, color: statusColors.fail },
+    { name: statusLabels.pass, value: summary.passed, color: statusColors.pass },
+    { name: statusLabels.fail, value: summary.failed, color: statusColors.fail },
     { name: 'Omitido', value: summary.omitted, color: statusColors.omit },
     { name: 'No aplica', value: summary.notApplicable, color: statusColors.not_applicable },
     { name: 'Pendiente', value: summary.pending, color: statusColors.pending },
@@ -159,8 +270,73 @@ function App() {
       return;
     }
     setSelectedId((current) => (selectedIds.includes(current) ? current : selectedIds[0]));
+    setAuditMode('manual');
     setWorkflowStep('audit');
     setActiveView('audit');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function continueToMode() {
+    if (!selectedIds.length) {
+      toast.error('Selecciona al menos un punto para auditar.');
+      return;
+    }
+    setWorkflowStep('mode');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function selectAuditMode(mode: AuditMode) {
+    if (mode === 'manual') {
+      startAudit();
+      return;
+    }
+    setAuditMode('voice');
+    setWorkflowStep('voice');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchToManualAudit() {
+    setAuditMode('manual');
+    setWorkflowStep('audit');
+    setActiveView('audit');
+    setSelectedId((current) => (selectedIds.includes(current) ? current : selectedIds[0]));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function switchToVoiceAudit() {
+    if (!selectedIds.length) {
+      toast.error('Selecciona al menos un punto para auditar.');
+      return;
+    }
+    setAuditMode('voice');
+    setWorkflowStep('voice');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function applyVoiceResults(results: VoiceAuditResult[]) {
+    if (!results.length) {
+      toast.error('No se detectaron puntos auditables en la transcripcion.');
+      return;
+    }
+
+    setEntries((current) => {
+      const next = { ...current };
+      results.forEach((result) => {
+        next[result.point.id] = {
+          ...(next[result.point.id] ?? emptyEntry()),
+          ...result.patch,
+          status: result.patch.status ?? 'pass',
+          updatedAt: new Date().toISOString(),
+        };
+      });
+      return next;
+    });
+    setSelectedId(results[0].point.id);
+    setVoiceDraftResults(results);
+    setAuditMode('manual');
+    setWorkflowStep('audit');
+    setActiveView('audit');
+    toast.success(`${results.length} puntos actualizados desde la auditoria de voz`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -206,18 +382,48 @@ function App() {
           onSelectMany={(ids) => setSelectedIds((current) => Array.from(new Set([...current, ...ids])))}
           onClearMany={(ids) => setSelectedIds((current) => current.filter((id) => !ids.includes(id)))}
           onBack={() => setWorkflowStep('company')}
-          onStart={startAudit}
+          onStart={continueToMode}
           onImport={handleImport}
+        />
+      )}
+
+      {workflowStep === 'mode' && (
+        <AuditModeStep onBack={() => setWorkflowStep('scope')} onSelectMode={selectAuditMode} />
+      )}
+
+      {workflowStep === 'voice' && (
+        <VoiceAuditStep
+          points={auditPoints}
+          summary={summary}
+          initialResults={voiceDraftResults}
+          onBack={() => setWorkflowStep('mode')}
+          onApply={applyVoiceResults}
+          onDraftResultsChange={setVoiceDraftResults}
+          onManualMode={switchToManualAudit}
+          onVoiceMode={switchToVoiceAudit}
+          onEditScope={() => {
+            setWorkflowStep('audit');
+            setActiveView('scope');
+          }}
+          onEditData={() => {
+            setWorkflowStep('audit');
+            setActiveView('data');
+          }}
         />
       )}
 
       {workflowStep === 'audit' && (
         <>
-          <AuditHeader metadata={metadata} summary={summary} onEditData={() => setActiveView('data')} onEditScope={() => setActiveView('scope')} />
+          <AuditHeader
+            metadata={metadata}
+            auditMode={auditMode}
+            onEditData={() => setActiveView('data')}
+            onEditScope={() => setActiveView('scope')}
+            onManualMode={switchToManualAudit}
+            onVoiceMode={switchToVoiceAudit}
+          />
 
-          <div className="mobile-progress" aria-label="Progreso de auditoria">
-            <span style={{ width: `${summary.progress}%` }} />
-          </div>
+          <AuditProgressBar progress={summary.progress} />
 
           {activeView === 'audit' && selected && (
             <section className="workspace">
@@ -240,7 +446,12 @@ function App() {
                   {filteredPoints.map((point) => {
                     const status = entries[point.id]?.status ?? 'pending';
                     return (
-                      <button key={point.id} className={point.id === selected.id ? 'active' : ''} onClick={() => setSelectedId(point.id)}>
+                      <button
+                        key={point.id}
+                        className={`status-${status} ${point.id === selected.id ? 'active' : ''}`}
+                        title={compactPointLabel(point)}
+                        onClick={() => setSelectedId(point.id)}
+                      >
                         <span className="point-code">{point.code}</span>
                         <span className="point-title">{pointRequirement(point)}</span>
                         <span className="point-meta">
@@ -257,8 +468,10 @@ function App() {
                 entry={selectedEntry}
                 index={selectedIndex}
                 total={auditPoints.length}
+                points={auditPoints}
                 onPrev={() => goToPoint(-1)}
                 onNext={() => goToPoint(1)}
+                onSelectPoint={setSelectedId}
                 onUpdate={(patch) => updateEntry(selected.id, patch)}
               />
             </section>
@@ -292,6 +505,7 @@ function App() {
               description="Ajusta los puntos de auditoría sin perder comentarios, evidencias ni estados ya guardados."
               backLabel="Volver a auditoria"
               startLabel="Guardar alcance"
+              compactFooter
             />
           )}
 
@@ -318,14 +532,10 @@ function SetupStep({
 }) {
   return (
     <motion.section className="step-screen" {...softEnter}>
+      <StepProgress current={1} />
       <div className="step-hero app-intro">
-        <div className="brand-mark" aria-hidden="true">
-          IFS
-        </div>
-        <span className="step-pill">Paso 1 de 2</span>
         <h1>Prepara la Auditoria</h1>
         <p className="step-copy">Configura los datos base y define el alcance antes de entrar punto por punto.</p>
-        <StepProgress current={1} />
       </div>
       <form className="step-card elevated-card" onSubmit={onSubmit}>
         <div className="card-heading">
@@ -356,6 +566,7 @@ function ScopeStep({
   description = 'Despliega cada bloque y marca solo los puntos que vas a auditar.',
   backLabel = 'Volver',
   startLabel = 'Comenzar Auditoria',
+  compactFooter = false,
 }: {
   points: StandardPoint[];
   selectedIds: string[];
@@ -371,6 +582,7 @@ function ScopeStep({
   description?: string;
   backLabel?: string;
   startLabel?: string;
+  compactFooter?: boolean;
 }) {
   const [scopeQuery, setScopeQuery] = React.useState('');
   const filtered = points.filter((point) => {
@@ -381,13 +593,12 @@ function ScopeStep({
   const groups = groupScopePoints(filtered, selectedSet);
 
   return (
-    <motion.section className="step-screen wide-step" {...softEnter}>
+    <motion.section className={`step-screen wide-step ${compactFooter ? 'with-bottom-nav' : ''}`} {...softEnter}>
+      <StepProgress current={2} />
       <div className="scope-header">
         <div>
-          <span className="step-pill">Paso 2 de 2</span>
           <h1>{title}</h1>
           <p className="step-copy">{description}</p>
-          <StepProgress current={2} />
         </div>
         <div className="selection-counter">
           <strong>{selectedIds.length}</strong>
@@ -439,12 +650,558 @@ function ScopeStep({
   );
 }
 
-function StepProgress({ current }: { current: 1 | 2 }) {
+function AuditModeStep({
+  onBack,
+  onSelectMode,
+}: {
+  onBack: () => void;
+  onSelectMode: (mode: AuditMode) => void;
+}) {
   return (
-    <div className="step-progress" aria-label={`Paso ${current} de 2`}>
-      <span className={current >= 1 ? 'active' : ''}>Datos</span>
-      <i />
-      <span className={current >= 2 ? 'active' : ''}>Alcance</span>
+    <motion.section className="step-screen" {...softEnter}>
+      <StepProgress current={3} />
+      <div className="step-hero app-intro">
+        <h1>Elige el modo de Auditoria</h1>
+        <p className="step-copy">Puedes completar la auditoría punto por punto o grabar una sesión para rellenar campos automáticamente desde la voz.</p>
+      </div>
+
+      <div className="mode-grid">
+        <button className="mode-card" onClick={() => onSelectMode('manual')}>
+          <ListChecks size={24} aria-hidden="true" />
+          <strong>Auditoria manual</strong>
+          <span>Revisa cada requisito y completa los campos directamente.</span>
+        </button>
+        <button className="mode-card accent" onClick={() => onSelectMode('voice')}>
+          <Mic size={24} aria-hidden="true" />
+          <strong>Auditoria automatica por voz</strong>
+          <span>Graba la locución, revisa la transcripción y aplica los puntos detectados.</span>
+        </button>
+      </div>
+
+      <div className="step-footer">
+        <button className="secondary-action" onClick={onBack}>
+          Volver al alcance
+        </button>
+      </div>
+    </motion.section>
+  );
+}
+
+function VoiceAuditStep({
+  points,
+  summary,
+  initialResults,
+  onBack,
+  onApply,
+  onDraftResultsChange,
+  onManualMode,
+  onVoiceMode,
+  onEditScope,
+  onEditData,
+}: {
+  points: StandardPoint[];
+  summary: ReturnType<typeof summarize>;
+  initialResults: VoiceAuditResult[];
+  onBack: () => void;
+  onApply: (results: VoiceAuditResult[]) => void;
+  onDraftResultsChange: (results: VoiceAuditResult[]) => void;
+  onManualMode: () => void;
+  onVoiceMode: () => void;
+  onEditScope: () => void;
+  onEditData: () => void;
+}) {
+  const [recordingState, setRecordingState] = React.useState<'idle' | 'recording' | 'paused' | 'finished'>('idle');
+  const [transcript, setTranscript] = React.useState('');
+  const [audioUrl, setAudioUrl] = React.useState('');
+  const [audioBlob, setAudioBlob] = React.useState<Blob | null>(null);
+  const [isProcessing, setIsProcessing] = React.useState(false);
+  const [processingStep, setProcessingStep] = React.useState(0);
+  const [processedResults, setProcessedResults] = React.useState<VoiceAuditResult[]>(initialResults);
+  const [audioLevels, setAudioLevels] = React.useState<number[]>(() => Array.from({ length: 18 }, () => 0.08));
+  const [heardSpeech, setHeardSpeech] = React.useState(false);
+  const mediaRecorderRef = React.useRef<MediaRecorder | null>(null);
+  const speechRef = React.useRef<any>(null);
+  const chunksRef = React.useRef<Blob[]>([]);
+  const audioContextRef = React.useRef<AudioContext | null>(null);
+  const analyserFrameRef = React.useRef<number | null>(null);
+  const volumeSamplesRef = React.useRef<number[]>([]);
+
+  const detectedResults = React.useMemo(() => parseVoiceAuditTranscript(transcript, points), [points, transcript]);
+  const reviewResults = processedResults.length ? processedResults : detectedResults;
+  const hasProcessedResults = processedResults.length > 0;
+  const canUseSpeechRecognition = Boolean(SpeechRecognitionCtor);
+
+  React.useEffect(() => {
+    return () => {
+      mediaRecorderRef.current?.stream.getTracks().forEach((track) => track.stop());
+      speechRef.current?.stop?.();
+      stopAudioMeter();
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl]);
+
+  React.useEffect(() => {
+    if (!isProcessing) return;
+    const timer = window.setInterval(() => {
+      setProcessingStep((current) => Math.min(current + 1, voiceProcessingMessages.length - 1));
+    }, 1500);
+    return () => window.clearInterval(timer);
+  }, [isProcessing]);
+
+  function stopAudioMeter() {
+    if (analyserFrameRef.current) {
+      window.cancelAnimationFrame(analyserFrameRef.current);
+      analyserFrameRef.current = null;
+    }
+    audioContextRef.current?.close().catch(() => undefined);
+    audioContextRef.current = null;
+  }
+
+  function startAudioMeter(stream: MediaStream, reset = false) {
+    stopAudioMeter();
+    const AudioContextCtor = window.AudioContext ?? (window as any).webkitAudioContext;
+    if (!AudioContextCtor) return;
+
+    const audioContext = new AudioContextCtor();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaStreamSource(stream);
+    analyser.fftSize = 512;
+    const buffer = new Uint8Array(analyser.fftSize);
+    source.connect(analyser);
+    audioContextRef.current = audioContext;
+    if (reset) {
+      volumeSamplesRef.current = [];
+      setHeardSpeech(false);
+      setAudioLevels(Array.from({ length: 18 }, () => 0.08));
+    }
+
+    const tick = () => {
+      analyser.getByteTimeDomainData(buffer);
+      let sum = 0;
+      for (const value of buffer) {
+        const centered = (value - 128) / 128;
+        sum += centered * centered;
+      }
+      const rms = Math.sqrt(sum / buffer.length);
+      volumeSamplesRef.current.push(rms);
+      if (volumeSamplesRef.current.length > 240) volumeSamplesRef.current.shift();
+      if (rms > 0.035) setHeardSpeech(true);
+      setAudioLevels((current) => [...current.slice(1), Math.min(1, Math.max(0.08, rms * 9))]);
+      analyserFrameRef.current = window.requestAnimationFrame(tick);
+    };
+
+    tick();
+  }
+
+  async function startRecording() {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mimeType = supportedAudioMimeType();
+      const recorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
+      chunksRef.current = [];
+      setProcessedResults([]);
+      onDraftResultsChange([]);
+      volumeSamplesRef.current = [];
+      startAudioMeter(stream, true);
+      recorder.ondataavailable = (event) => {
+        if (event.data.size) chunksRef.current.push(event.data);
+      };
+      recorder.onstop = () => {
+        const audioBlob = new Blob(chunksRef.current, { type: recorder.mimeType || mimeType || chunksRef.current[0]?.type || 'audio/webm' });
+        setAudioBlob(audioBlob);
+        setAudioUrl((current) => {
+          if (current) URL.revokeObjectURL(current);
+          return URL.createObjectURL(audioBlob);
+        });
+        stream.getTracks().forEach((track) => track.stop());
+        stopAudioMeter();
+      };
+      recorder.start();
+      mediaRecorderRef.current = recorder;
+
+      if (SpeechRecognitionCtor) {
+        const recognition = new SpeechRecognitionCtor();
+        recognition.lang = 'es-ES';
+        recognition.continuous = true;
+        recognition.interimResults = true;
+        recognition.onresult = (event: any) => {
+          const text = Array.from(event.results)
+            .map((result: any) => result[0]?.transcript ?? '')
+            .join(' ');
+          setTranscript(text);
+        };
+        recognition.start();
+        speechRef.current = recognition;
+      }
+
+      setRecordingState('recording');
+      toast.success('Grabacion iniciada');
+    } catch {
+      toast.error('No se pudo acceder al microfono.');
+    }
+  }
+
+  function pauseRecording() {
+    mediaRecorderRef.current?.pause();
+    speechRef.current?.stop?.();
+    stopAudioMeter();
+    setRecordingState('paused');
+  }
+
+  function resumeRecording() {
+    mediaRecorderRef.current?.resume();
+    speechRef.current?.start?.();
+    const stream = mediaRecorderRef.current?.stream;
+    if (stream) startAudioMeter(stream);
+    setRecordingState('recording');
+  }
+
+  function finishRecording() {
+    mediaRecorderRef.current?.stop();
+    speechRef.current?.stop?.();
+    stopAudioMeter();
+    setRecordingState('finished');
+  }
+
+  function resetRecording() {
+    mediaRecorderRef.current?.stream.getTracks().forEach((track) => track.stop());
+    speechRef.current?.stop?.();
+    stopAudioMeter();
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    chunksRef.current = [];
+    volumeSamplesRef.current = [];
+    setRecordingState('idle');
+    setAudioBlob(null);
+    setAudioUrl('');
+    setTranscript('');
+    setProcessedResults([]);
+    setHeardSpeech(false);
+    setAudioLevels(Array.from({ length: 18 }, () => 0.08));
+    onDraftResultsChange([]);
+  }
+
+  async function processWithAi() {
+    const hasUsableAudio = !audioBlob || heardSpeech || volumeSamplesRef.current.length < 10;
+    if (!transcript.trim() && !hasUsableAudio) {
+      toast.error('No se detecto voz en la grabacion. Graba de nuevo o escribe la transcripcion antes de procesar.');
+      return;
+    }
+
+    setIsProcessing(true);
+    setProcessingStep(0);
+    setProcessedResults([]);
+    onDraftResultsChange([]);
+    try {
+      const form = new FormData();
+      if (audioBlob) form.append('audio', audioBlob, `auditoria-voz.${audioFileExtension(audioBlob.type)}`);
+      form.append('transcript', transcript);
+      form.append('points', JSON.stringify(points));
+
+      const response = await fetch('/api/voice-audit', {
+        method: 'POST',
+        body: form,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || 'No se pudo procesar la auditoria de voz.');
+      setProcessingStep(voiceProcessingMessages.length - 1);
+
+      if (data.transcript) setTranscript(data.transcript);
+      const pointById = new Map(points.map((point) => [point.id, point]));
+      const pointByCode = new Map(points.map((point) => [point.code.replace(/\*$/, ''), point]));
+      const results: VoiceAuditResult[] = (data.items ?? []).flatMap((item: any) => {
+        const point = pointById.get(item.pointId) ?? pointByCode.get(String(item.pointCode || '').replace(/\*$/, ''));
+        if (!point) return [];
+        const patch: Partial<AuditEntry> = {};
+        if (item.status && item.status !== 'pending') patch.status = item.status;
+        if (item.comment) patch.comment = item.comment;
+        if (item.extraData) patch.extraData = item.extraData;
+        if (item.evidence) patch.evidence = item.evidence;
+        if (item.correctiveAction) patch.correctiveAction = item.correctiveAction;
+        if (item.responsible) patch.responsible = item.responsible;
+        if (item.dueDate) patch.dueDate = item.dueDate;
+        return [{ point, patch, excerpt: item.sourceText || item.comment || '', confidence: item.confidence }];
+      });
+
+      if (data.warnings?.length) toast.message(data.warnings.join(' · '));
+      const nextResults = results.length ? results : detectedResults;
+      if (!nextResults.length) {
+        toast.error('No se detectaron puntos auditables en la transcripcion.');
+        return;
+      }
+      setProcessedResults(nextResults);
+      onDraftResultsChange(nextResults);
+      toast.success(`${nextResults.length} puntos identificados y listos para revisar`);
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'No se pudo procesar con IA.');
+    } finally {
+      setIsProcessing(false);
+    }
+  }
+
+  return (
+    <motion.section className="step-screen wide-step audit-mode-screen" {...softEnter}>
+      <div className="scope-header voice-header">
+        <div>
+          <h1>Auditoria de voz</h1>
+          <p className="step-copy">Dicta el punto de la norma, el resultado y los campos que quieras rellenar. Después revisa la transcripción antes de aplicarla.</p>
+        </div>
+        <div className="voice-top-actions">
+          <div className="voice-action-row">
+            <div className="audit-mode-switch" aria-label="Cambiar modo de auditoria">
+              <button onClick={onManualMode}>
+                <ListChecks size={16} aria-hidden="true" />
+                Manual
+              </button>
+              <button className="active" onClick={onVoiceMode}>
+                <Mic size={16} aria-hidden="true" />
+                Automatica
+              </button>
+            </div>
+            <button className="secondary-action" onClick={onEditScope}>
+              <ClipboardCheck size={18} aria-hidden="true" />
+              Puntos
+            </button>
+            <button className="secondary-action" onClick={onEditData}>
+              <Building2 size={18} aria-hidden="true" />
+              Datos
+            </button>
+          </div>
+          <div className={`recording-indicator ${recordingState}`}>
+            <Mic size={18} aria-hidden="true" />
+            <span>{recordingState === 'recording' ? 'Grabando' : recordingState === 'paused' ? 'Pausado' : recordingState === 'finished' ? 'Finalizado' : 'Listo'}</span>
+          </div>
+        </div>
+      </div>
+
+      <AuditProgressBar progress={summary.progress} />
+
+      <section className="voice-panel">
+        <details className="voice-guide">
+          <summary>
+            <span>Guia rapida para dictar</span>
+            <ChevronDown size={18} aria-hidden="true" />
+          </summary>
+          <dl>
+            <div>
+              <dt>Estados</dt>
+              <dd>conforme, no conforme, no aplica</dd>
+            </div>
+            <div>
+              <dt>Campos</dt>
+              <dd>comentario de auditoria, datos adicionales, evidencia, accion correctiva, responsable, fecha limite</dd>
+            </div>
+            <div>
+              <dt>Ejemplo</dt>
+              <dd>Punto 1.1.1 conforme. Comentario de auditoria: politica comunicada. Datos adicionales: revisado con direccion.</dd>
+            </div>
+          </dl>
+        </details>
+
+        <div className="voice-controls">
+          {recordingState === 'idle' && (
+            <button className="record-button" aria-label="Grabar sesion" onClick={startRecording}>
+              <Mic size={18} aria-hidden="true" />
+            </button>
+          )}
+          {recordingState === 'recording' && (
+            <>
+              <button className="secondary-action" onClick={pauseRecording}>
+                <Pause size={18} aria-hidden="true" />
+                Pausar
+              </button>
+              <button className="primary-action danger-action" onClick={finishRecording}>
+                <Square size={18} aria-hidden="true" />
+                Finalizar
+              </button>
+            </>
+          )}
+          {recordingState === 'paused' && (
+            <>
+              <button className="secondary-action" onClick={resumeRecording}>
+                <Play size={18} aria-hidden="true" />
+                Reanudar
+              </button>
+              <button className="primary-action danger-action" onClick={finishRecording}>
+                <Square size={18} aria-hidden="true" />
+                Finalizar
+              </button>
+            </>
+          )}
+          {audioUrl ? (
+            <div className="voice-player">
+              <div>
+                <span>Grabacion de voz</span>
+                <button className="voice-player-reset" onClick={resetRecording}>
+                  Repetir grabacion
+                </button>
+              </div>
+              <audio controls src={audioUrl} />
+            </div>
+          ) : null}
+        </div>
+
+        <div className={`voice-waveform ${recordingState === 'recording' ? 'active' : ''}`} aria-hidden="true">
+          {audioLevels.map((level, index) => (
+            <span key={index} style={{ transform: `scaleY(${level})` }} />
+          ))}
+        </div>
+
+        {!canUseSpeechRecognition && (
+          <p className="voice-note">Este navegador no ofrece transcripción local automática. Puedes pegar aquí el texto generado por tu transcriptor IA y aplicar el análisis.</p>
+        )}
+
+        <label className="voice-transcript">
+          <span>Transcripcion de la auditoria</span>
+          <textarea
+            value={transcript}
+            onChange={(event) => {
+              setTranscript(event.target.value);
+              setProcessedResults([]);
+              onDraftResultsChange([]);
+            }}
+            rows={8}
+            placeholder="Ejemplo: Punto 1.1.1 conforme. Comentario politica comunicada. Datos adicionales revisado con direccion. Punto 1.1.2 no conforme. Comentario falta evidencia documental."
+          />
+        </label>
+      </section>
+
+      <section className="voice-results">
+        <div className="card-heading">
+          <h2>{hasProcessedResults ? 'Puntos identificados y rellenados' : 'Puntos detectados'}</h2>
+          <p>
+            {isProcessing
+              ? voiceProcessingMessages[processingStep]
+              : reviewResults.length
+                ? `${reviewResults.length} puntos ${hasProcessedResults ? 'revisados por IA y listos para continuar.' : 'detectados en la transcripcion.'}`
+                : 'Aun no se han detectado puntos de la auditoria.'}
+          </p>
+        </div>
+
+        {isProcessing ? (
+          <div className="voice-processing" role="status" aria-live="polite">
+            <Loader2 size={24} aria-hidden="true" />
+            <div>
+              <strong>Procesando auditoria de voz</strong>
+              <span>{voiceProcessingMessages[processingStep]}</span>
+            </div>
+          </div>
+        ) : null}
+
+        <div className="voice-result-list">
+          {reviewResults.map((result, index) => (
+            <details key={`${result.point.id}-${result.excerpt}`} className="voice-result-item" open={hasProcessedResults && index === 0}>
+              <summary>
+                <strong>{result.point.code}</strong>
+                <span>{statusLabels[voiceResultStatus(result)]}</span>
+                <p>{result.patch.comment || result.excerpt || pointRequirement(result.point)}</p>
+                <ChevronDown size={18} aria-hidden="true" />
+              </summary>
+              <div className="voice-result-details">
+                <dl>
+                  <div>
+                    <dt>Requisito</dt>
+                    <dd>{pointRequirement(result.point)}</dd>
+                  </div>
+                  <div>
+                    <dt>Estado</dt>
+                    <dd>{statusLabels[voiceResultStatus(result)]}</dd>
+                  </div>
+                  {result.patch.comment ? (
+                    <div>
+                      <dt>Comentario</dt>
+                      <dd>{result.patch.comment}</dd>
+                    </div>
+                  ) : null}
+                  {result.patch.extraData ? (
+                    <div>
+                      <dt>Datos adicionales</dt>
+                      <dd>{result.patch.extraData}</dd>
+                    </div>
+                  ) : null}
+                  {result.patch.evidence ? (
+                    <div>
+                      <dt>Evidencia</dt>
+                      <dd>{result.patch.evidence}</dd>
+                    </div>
+                  ) : null}
+                  {result.patch.correctiveAction ? (
+                    <div>
+                      <dt>Accion correctiva</dt>
+                      <dd>{result.patch.correctiveAction}</dd>
+                    </div>
+                  ) : null}
+                  {result.patch.responsible ? (
+                    <div>
+                      <dt>Responsable</dt>
+                      <dd>{result.patch.responsible}</dd>
+                    </div>
+                  ) : null}
+                  {result.patch.dueDate ? (
+                    <div>
+                      <dt>Fecha limite</dt>
+                      <dd>{result.patch.dueDate}</dd>
+                    </div>
+                  ) : null}
+                  {result.excerpt ? (
+                    <div>
+                      <dt>Fragmento detectado</dt>
+                      <dd>{result.excerpt}</dd>
+                    </div>
+                  ) : null}
+                </dl>
+              </div>
+            </details>
+          ))}
+        </div>
+      </section>
+
+      <div className="step-footer voice-footer">
+        <div className={`voice-footer-secondary ${hasProcessedResults ? 'has-continue' : ''}`}>
+          <button className="secondary-action" onClick={onBack}>
+            Volver
+          </button>
+          {hasProcessedResults ? (
+            <button className="primary-action success-action" disabled={isProcessing} aria-label="Continuar con puntos identificados" onClick={() => onApply(processedResults)}>
+              <CheckCircle2 size={18} aria-hidden="true" />
+              Continuar
+            </button>
+          ) : null}
+        </div>
+        <button className="primary-action" disabled={isProcessing || (!audioBlob && !transcript.trim())} onClick={processWithAi}>
+          <Sparkles size={18} aria-hidden="true" />
+          {isProcessing ? 'Procesando con IA...' : 'Procesar y rellenar auditoria'}
+        </button>
+      </div>
+    </motion.section>
+  );
+}
+
+function StepProgress({ current }: { current: 1 | 2 | 3 }) {
+  return (
+    <ol className="step-progress" style={{ '--step-progress': current === 1 ? 0 : current === 2 ? 0.5 : 1 } as React.CSSProperties} aria-label={`Paso ${current} de 3`}>
+      <li className={current >= 1 ? 'active' : ''}>
+        <strong>1</strong>
+        <span>Datos</span>
+      </li>
+      <li className={current >= 2 ? 'active' : ''}>
+        <strong>2</strong>
+        <span>Alcance</span>
+      </li>
+      <li className={current >= 3 ? 'active' : ''}>
+        <strong>3</strong>
+        <span>Auditoria</span>
+      </li>
+    </ol>
+  );
+}
+
+function AuditProgressBar({ progress }: { progress: number }) {
+  return (
+    <div className="audit-progress-bar" aria-label={`Progreso auditado ${progress}%`}>
+      <div>
+        <span style={{ width: `${progress}%` }} />
+      </div>
+      <strong>{progress}% auditado</strong>
     </div>
   );
 }
@@ -524,14 +1281,18 @@ function groupScopePoints(points: StandardPoint[], selectedSet: Set<string>) {
 
 function AuditHeader({
   metadata,
-  summary,
+  auditMode,
   onEditData,
   onEditScope,
+  onManualMode,
+  onVoiceMode,
 }: {
   metadata: AuditMetadata;
-  summary: ReturnType<typeof summarize>;
+  auditMode: AuditMode;
   onEditData: () => void;
   onEditScope: () => void;
+  onManualMode: () => void;
+  onVoiceMode: () => void;
 }) {
   return (
     <section className="audit-header">
@@ -542,6 +1303,16 @@ function AuditHeader({
           {metadata.auditor || 'Auditor pendiente'} · {metadata.auditDate}
         </p>
       </div>
+      <div className="audit-mode-switch" aria-label="Cambiar modo de auditoria">
+        <button className={auditMode === 'manual' ? 'active' : ''} onClick={onManualMode}>
+          <ListChecks size={16} aria-hidden="true" />
+          Manual
+        </button>
+        <button className={auditMode === 'voice' ? 'active' : ''} onClick={onVoiceMode}>
+          <Mic size={16} aria-hidden="true" />
+          Automatica
+        </button>
+      </div>
       <button onClick={onEditScope}>
         <ListChecks size={18} aria-hidden="true" />
         Puntos
@@ -550,7 +1321,6 @@ function AuditHeader({
         <Building2 size={18} aria-hidden="true" />
         Editar
       </button>
-      <strong>{summary.progress}%</strong>
     </section>
   );
 }
@@ -560,16 +1330,20 @@ function AuditPointPanel({
   entry,
   index,
   total,
+  points,
   onPrev,
   onNext,
+  onSelectPoint,
   onUpdate,
 }: {
   point: StandardPoint;
   entry: AuditEntry;
   index: number;
   total: number;
+  points: StandardPoint[];
   onPrev: () => void;
   onNext: () => void;
+  onSelectPoint: (pointId: string) => void;
   onUpdate: (patch: Partial<AuditEntry>) => void;
 }) {
   return (
@@ -592,6 +1366,17 @@ function AuditPointPanel({
         </button>
       </div>
 
+      <label className="mobile-point-picker">
+        <span>Requisito actual</span>
+        <select value={point.id} onChange={(event) => onSelectPoint(event.target.value)}>
+          {points.map((item) => (
+            <option key={item.id} value={item.id}>
+              {compactPointLabel(item)}
+            </option>
+          ))}
+        </select>
+      </label>
+
       <div className="panel-header">
         <div>
           <h2>{pointHeading(point)}</h2>
@@ -611,7 +1396,7 @@ function AuditPointPanel({
       </article>
 
       <div className="status-grid">
-        {(Object.keys(statusLabels) as AuditStatus[]).map((status) => (
+        {auditActionStatuses.map((status) => (
           <button
             key={status}
             className={entry.status === status ? 'selected' : ''}
@@ -682,7 +1467,7 @@ function StatsView({ summary, chartData }: { summary: ReturnType<typeof summariz
       </div>
       <section className="summary-grid">
         <Metric icon={<ClipboardCheck aria-hidden="true" />} label="Progreso" value={`${summary.progress}%`} detail={`${summary.evaluated}/${summary.total} revisados`} />
-        <Metric icon={<CheckCircle2 aria-hidden="true" />} label="Cumplimiento" value={`${summary.compliance}%`} detail={`${summary.passed} puntos pasan`} />
+        <Metric icon={<CheckCircle2 aria-hidden="true" />} label="Cumplimiento" value={`${summary.compliance}%`} detail={`${summary.passed} conformes`} />
         <Metric icon={<XCircle aria-hidden="true" />} label="No conformes" value={String(summary.failed)} detail={`${summary.mandatoryFailed} KO/obligatorios fallan`} />
         <Metric icon={<AlertTriangle aria-hidden="true" />} label="Pendientes" value={String(summary.pending)} detail="Por completar" />
       </section>
@@ -724,23 +1509,23 @@ function BottomNav({
 }) {
   return (
     <nav className="bottom-nav" aria-label="Navegacion principal">
-      <button className={activeView === 'audit' ? 'active' : ''} onClick={() => setActiveView('audit')}>
+      <button className={activeView === 'audit' ? 'active' : ''} aria-label="Auditar" onClick={() => setActiveView('audit')}>
         <ListChecks size={20} aria-hidden="true" />
         <span>Auditar</span>
       </button>
-      <button className={activeView === 'scope' ? 'active' : ''} onClick={() => setActiveView('scope')}>
+      <button className={activeView === 'scope' ? 'active' : ''} aria-label="Puntos" onClick={() => setActiveView('scope')}>
         <ClipboardCheck size={20} aria-hidden="true" />
         <span>Puntos</span>
       </button>
-      <button className={activeView === 'data' ? 'active' : ''} onClick={() => setActiveView('data')}>
+      <button className={activeView === 'data' ? 'active' : ''} aria-label="Datos" onClick={() => setActiveView('data')}>
         <Building2 size={20} aria-hidden="true" />
         <span>Datos</span>
       </button>
-      <button className={activeView === 'stats' ? 'active' : ''} onClick={() => setActiveView('stats')}>
+      <button className={activeView === 'stats' ? 'active' : ''} aria-label="Estado" onClick={() => setActiveView('stats')}>
         <BarChart3 size={20} aria-hidden="true" />
         <span>Estado</span>
       </button>
-      <button onClick={onExport}>
+      <button aria-label="Exportar Excel" onClick={onExport}>
         <Download size={20} aria-hidden="true" />
         <span>Excel</span>
       </button>

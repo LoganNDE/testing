@@ -24,6 +24,14 @@ Despues abre la URL que muestre Vite, normalmente:
 http://127.0.0.1:5173
 ```
 
+`npm run dev` arranca Vite y la API local de auditoria por voz. Para activar la IA:
+
+1. Copia `.env.example` a `.env`.
+2. Define `OPENAI_API_KEY`.
+3. Mantén `OPENAI_TRANSCRIPTION_MODEL=gpt-4o-transcribe` y `OPENAI_AUDIT_MODEL=gpt-5.5`, o ajustalos si necesitas otros modelos compatibles.
+
+La clave se usa solo en el servidor local `server/api-server.mjs`; nunca se expone al navegador.
+
 Para generar una version de produccion:
 
 ```bash
@@ -42,10 +50,12 @@ npm run extract:ifs
 2. Selecciona los puntos y subpuntos que entran en el alcance de la auditoria.
 3. Puedes seleccionar todos, deseleccionar todos o buscar puntos concretos.
 4. Pulsa `Comenzar auditoria`.
-5. En movil, usa `Anterior` y `Siguiente` para avanzar punto por punto.
-6. Marca cada requisito como `Pasa`, `No pasa`, `Omitido`, `No aplica` o `Pendiente`.
-7. Anade comentarios, datos adicionales, evidencias, acciones correctivas, responsable y fecha limite.
-8. Usa la navegacion inferior para cambiar entre `Auditar`, `Datos`, `Estado` y `Excel`.
+5. Elige auditoria manual o auditoria automatica por voz.
+6. En modo voz, graba o pega una transcripcion y pulsa `Procesar y rellenar auditoria`.
+7. En modo manual, usa `Anterior` y `Siguiente` para avanzar punto por punto.
+8. Marca cada requisito como `Conforme`, `No conforme` o `No aplica`.
+9. Anade comentarios, datos adicionales, evidencias, acciones correctivas, responsable y fecha limite.
+10. Usa la navegacion inferior para cambiar entre `Auditar`, `Datos`, `Estado` y `Excel`.
 
 ## Formato del JSON IFS-HPC
 

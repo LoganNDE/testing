@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite --host 127.0.0.1",
+    "dev": "node scripts/dev-with-api.mjs",
+    "dev:vite": "vite --host 127.0.0.1",
+    "api": "node server/api-server.mjs",
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "extract:ifs": "node scripts/extract-ifs-hpc-part2.mjs",

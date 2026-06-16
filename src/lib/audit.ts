@@ -2,8 +2,8 @@ import type { AuditEntry, AuditStatus, AuditSummary, StandardPoint } from '../ty
 
 export const statusLabels: Record<AuditStatus, string> = {
   pending: 'Pendiente',
-  pass: 'Pasa',
-  fail: 'No pasa',
+  pass: 'Conforme',
+  fail: 'No conforme',
   omit: 'Omitido',
   not_applicable: 'No aplica',
 };

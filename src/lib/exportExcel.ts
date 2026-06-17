@@ -141,7 +141,8 @@ async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
   if (typeof DecompressionStream === 'undefined') {
     throw new Error('Este navegador no permite exportar la plantilla exacta. Usa Chrome, Edge o actualiza el navegador.');
   }
-  const stream = new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
+  const buffer = data.buffer.slice(data.byteOffset, data.byteOffset + data.byteLength) as ArrayBuffer;
+  const stream = new Blob([buffer]).stream().pipeThrough(new DecompressionStream('deflate-raw'));
   return new Uint8Array(await new Response(stream).arrayBuffer());
 }
 
@@ -248,7 +249,8 @@ function writeZip(entries: ZipEntry[]): Blob {
   writeU32(output, centralOffset);
   writeU16(output, 0);
 
-  return new Blob([new Uint8Array(output)], {
+  const buffer = new Uint8Array(output).buffer as ArrayBuffer;
+  return new Blob([buffer], {
     type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
   });
 }

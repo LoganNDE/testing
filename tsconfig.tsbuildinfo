@@ -1,1 +1,1 @@
-{"root":["./src/main.tsx","./src/types.ts","./src/data/defaultstandard.ts","./src/lib/audit.test.ts","./src/lib/audit.ts","./src/lib/exportexcel.ts","./src/lib/standardparser.test.ts","./src/lib/standardparser.ts"],"version":"5.9.3"}
+{"root":["./src/main.tsx","./src/types.ts","./src/vite-env.d.ts","./src/data/defaultStandard.ts","./src/lib/audit.test.ts","./src/lib/audit.ts","./src/lib/exportExcel.ts","./src/lib/standardParser.test.ts","./src/lib/standardParser.ts"],"version":"5.9.3"}

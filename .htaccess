@@ -1,0 +1,29 @@
+# =========================================================
+#  Basic Auth - acceso restringido
+# =========================================================
+AuthType Basic
+AuthName "Zona restringida - Acceso autorizado"
+AuthUserFile /var/www/vhosts/logannr.me/sandbox.logannr.me/.htpasswd
+Require valid-user
+
+# =========================================================
+#  Evitar indexacion por motores de busqueda
+# =========================================================
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+</IfModule>
+
+# =========================================================
+#  Proteger archivos sensibles
+# =========================================================
+<FilesMatch "^\.(htaccess|htpasswd|env|git.*)$">
+    Require all denied
+</FilesMatch>
+
+# Bloquear listados de directorio
+Options -Indexes
+
+# NOTA: el proxy hacia /api/* (servidor Node en 127.0.0.1:8787) NO puede
+# configurarse desde aqui — este vhost no permite Options FollowSymLinks
+# en .htaccess, por lo que mod_rewrite/[P] se ignora silenciosamente.
+# El proxy debe ir en "Additional Apache directives" del panel Plesk.

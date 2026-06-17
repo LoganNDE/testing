@@ -137,6 +137,12 @@ function writeU32(output: number[], value: number): void {
   output.push(value & 0xff, (value >>> 8) & 0xff, (value >>> 16) & 0xff, (value >>> 24) & 0xff);
 }
 
+function pushBytes(output: number[], bytes: ArrayLike<number>): void {
+  for (let index = 0; index < bytes.length; index += 1) {
+    output.push(bytes[index]);
+  }
+}
+
 async function inflateRaw(data: Uint8Array): Promise<Uint8Array> {
   if (typeof DecompressionStream === 'undefined') {
     throw new Error('Este navegador no permite exportar la plantilla exacta. Usa Chrome, Edge o actualiza el navegador.');
@@ -216,7 +222,8 @@ function writeZip(entries: ZipEntry[]): Blob {
     writeU32(output, entry.data.length);
     writeU16(output, nameBytes.length);
     writeU16(output, 0);
-    output.push(...nameBytes, ...entry.data);
+    pushBytes(output, nameBytes);
+    pushBytes(output, entry.data);
 
     writeU32(centralDirectory, 0x02014b50);
     writeU16(centralDirectory, 20);
@@ -235,11 +242,11 @@ function writeZip(entries: ZipEntry[]): Blob {
     writeU16(centralDirectory, 0);
     writeU32(centralDirectory, 0);
     writeU32(centralDirectory, offset);
-    centralDirectory.push(...nameBytes);
+    pushBytes(centralDirectory, nameBytes);
   }
 
   const centralOffset = output.length;
-  output.push(...centralDirectory);
+  pushBytes(output, centralDirectory);
   writeU32(output, 0x06054b50);
   writeU16(output, 0);
   writeU16(output, 0);

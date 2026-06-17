@@ -7,6 +7,8 @@ loadEnvFile();
 
 const port = Number(process.env.API_PORT || 8787);
 const host = process.env.API_HOST || '127.0.0.1';
+const maxRequestBytes = Number(process.env.MAX_VOICE_AUDIT_BYTES || 25 * 1024 * 1024);
+const maxAuditPoints = Number(process.env.MAX_AUDIT_POINTS || 500);
 
 function sendJson(response, status, payload) {
   response.writeHead(status, {
@@ -19,6 +21,11 @@ function sendJson(response, status, payload) {
 }
 
 async function parseMultipartRequest(request) {
+  const contentLength = Number(request.headers['content-length'] || 0);
+  if (contentLength && contentLength > maxRequestBytes) {
+    throw new Error('La grabacion o transcripcion supera el tamano maximo permitido.');
+  }
+
   const webRequest = new Request(`http://127.0.0.1:${port}${request.url}`, {
     method: request.method,
     headers: request.headers,
@@ -44,6 +51,10 @@ const server = createServer(async (request, response) => {
     const file = form.get('audio');
     const transcript = String(form.get('transcript') || '');
     const points = JSON.parse(String(form.get('points') || '[]'));
+    if (!Array.isArray(points) || points.length > maxAuditPoints) {
+      sendJson(response, 400, { error: 'Listado de puntos invalido o demasiado grande.' });
+      return;
+    }
 
     const result = await processVoiceAudit({
       file: file instanceof File ? file : null,

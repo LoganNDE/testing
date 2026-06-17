@@ -32,13 +32,15 @@ http://127.0.0.1:5173
 
 La clave se usa solo en el servidor local `server/api-server.mjs`; nunca se expone al navegador.
 
-La auditoria por voz esta optimizada para coste bajo:
+La auditoria por voz mantiene las claves fuera del frontend:
 
-- Si escribes una transcripcion con codigos de punto, la app la procesa localmente sin llamar a OpenAI.
-- Si grabas audio, OpenAI se usa para transcribir; despues el servidor intenta rellenar puntos localmente.
-- Solo si no puede interpretar la transcripcion localmente llama al modelo de extraccion.
+- El navegador solo llama a `/api/voice-audit` o a `VITE_API_BASE_URL/api/voice-audit`.
+- `OPENAI_API_KEY` solo se lee en el proceso Node del servidor.
+- Ninguna variable con prefijo `VITE_` debe contener secretos, porque Vite las incluye en el bundle del navegador.
+- OpenAI se usa en el servidor para transcribir audio y estructurar los campos de auditoria.
 - El servidor envia a la IA un indice minimo de puntos (`id`, `code`, `mandatory`, `ko`), no el texto completo de la norma.
-- Para mejores resultados y menor coste, dicta siempre el codigo: `Punto 2.1.1.3 conforme. Comentario...`.
+- `MAX_VOICE_AUDIT_BYTES` limita el tamano de audio/transcripcion aceptado; el ejemplo usa 150 MB, pensado para unas 2 horas de audio comprimido.
+- Para mejores resultados, dicta siempre el codigo y los campos: `Punto 2.1.1.3 conforme. Comentario... Datos adicionales...`.
 
 Para generar una version de produccion:
 
@@ -75,7 +77,7 @@ npm run extract:ifs
 6. En modo voz, graba o pega una transcripcion y pulsa `Procesar y rellenar auditoria`.
 7. En modo manual, usa `Anterior` y `Siguiente` para avanzar punto por punto.
 8. Marca cada requisito como `Conforme`, `No conforme` o `No aplica`.
-9. Anade comentarios, datos adicionales, evidencias, acciones correctivas, responsable y fecha limite.
+9. Anade comentarios y datos adicionales.
 10. Usa la navegacion inferior para cambiar entre `Auditar`, `Datos`, `Estado` y `Excel`.
 
 ## Formato del JSON IFS-HPC
@@ -110,7 +112,7 @@ Tambien acepta estructuras anidadas con claves como `points`, `items`, `requirem
 - Puntos obligatorios y omitibles.
 - Guardado automatico en el navegador.
 - Estadisticas de progreso y cumplimiento.
-- Exportacion Excel con todos los comentarios y evidencias.
+- Exportacion Excel con comentarios, datos adicionales y estado de cada punto.
 - Campos especificos de IFS-HPC: KO, pagina y puntos que requieren informacion adicional en informe.
 - Interfaz responsive optimizada para auditoria desde movil.
 - Flujo guiado por pasos: datos iniciales, seleccion de alcance y auditoria.

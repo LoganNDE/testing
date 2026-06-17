@@ -28,9 +28,17 @@ http://127.0.0.1:5173
 
 1. Copia `.env.example` a `.env`.
 2. Define `OPENAI_API_KEY`.
-3. Mantén `OPENAI_TRANSCRIPTION_MODEL=gpt-4o-transcribe` y `OPENAI_AUDIT_MODEL=gpt-5.5`, o ajustalos si necesitas otros modelos compatibles.
+3. Manten `OPENAI_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe` y `OPENAI_AUDIT_MODEL=gpt-4.1-mini`, o ajustalos si necesitas otros modelos compatibles.
 
 La clave se usa solo en el servidor local `server/api-server.mjs`; nunca se expone al navegador.
+
+La auditoria por voz esta optimizada para coste bajo:
+
+- Si escribes una transcripcion con codigos de punto, la app la procesa localmente sin llamar a OpenAI.
+- Si grabas audio, OpenAI se usa para transcribir; despues el servidor intenta rellenar puntos localmente.
+- Solo si no puede interpretar la transcripcion localmente llama al modelo de extraccion.
+- El servidor envia a la IA un indice minimo de puntos (`id`, `code`, `mandatory`, `ko`), no el texto completo de la norma.
+- Para mejores resultados y menor coste, dicta siempre el codigo: `Punto 2.1.1.3 conforme. Comentario...`.
 
 Para generar una version de produccion:
 

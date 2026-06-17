@@ -27,6 +27,14 @@
   box-sizing: border-box;
 }
 
+html,
+body,
+#root {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   overflow-x: hidden;
@@ -40,10 +48,12 @@ button,
 input,
 select,
 textarea {
+  max-width: 100%;
   font: inherit;
 }
 
 button {
+  min-width: 0;
   min-height: 44px;
   cursor: pointer;
   touch-action: manipulation;
@@ -137,6 +147,7 @@ h2 {
 .single-panel,
 .audit-progress-bar {
   width: min(1180px, 100%);
+  min-width: 0;
   margin: 0 auto;
 }
 
@@ -1069,9 +1080,34 @@ textarea {
 
 .voice-result-item {
   border: 1px solid #e2e8f0;
+  border-left-width: 5px;
   border-radius: 12px;
   background: white;
   overflow: hidden;
+}
+
+.voice-result-item.status-pass {
+  border-left-color: var(--green);
+  background: #fbfefc;
+}
+
+.voice-result-item.status-fail {
+  border-left-color: var(--red);
+  background: #fffafa;
+}
+
+.voice-result-item.status-not_applicable {
+  border-left-color: var(--blue);
+  background: #f8fbff;
+}
+
+.voice-result-item.status-pending {
+  border-left-color: #94a3b8;
+}
+
+.voice-result-item.status-omit {
+  border-left-color: var(--amber);
+  background: #fffdf5;
 }
 
 .voice-result-item summary {
@@ -1102,14 +1138,53 @@ textarea {
   color: var(--accent-strong);
 }
 
-.voice-result-item summary span {
+.voice-status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border-radius: 999px;
-  padding: 2px 8px;
+  border: 1px solid transparent;
+  padding: 3px 9px;
   color: var(--accent);
   background: var(--accent-soft);
   font-size: 0.78rem;
   font-weight: 720;
+  line-height: 1;
   white-space: nowrap;
+}
+
+.voice-status-pill.compact {
+  padding: 4px 9px;
+}
+
+.voice-result-item.status-pass .voice-status-pill {
+  border-color: #bbf7d0;
+  color: #166534;
+  background: #dcfce7;
+}
+
+.voice-result-item.status-fail .voice-status-pill {
+  border-color: #fecaca;
+  color: #991b1b;
+  background: #fee2e2;
+}
+
+.voice-result-item.status-not_applicable .voice-status-pill {
+  border-color: #bfdbfe;
+  color: #1d4ed8;
+  background: #dbeafe;
+}
+
+.voice-result-item.status-pending .voice-status-pill {
+  border-color: #cbd5e1;
+  color: #475569;
+  background: #f1f5f9;
+}
+
+.voice-result-item.status-omit .voice-status-pill {
+  border-color: #fde68a;
+  color: #92400e;
+  background: #fef3c7;
 }
 
 .voice-result-item summary p {
@@ -1149,6 +1224,11 @@ textarea {
   overflow-wrap: anywhere;
 }
 
+.voice-result-details dd.empty-field {
+  color: var(--muted);
+  font-style: italic;
+}
+
 .audit-header {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto auto auto;
@@ -1178,6 +1258,7 @@ textarea {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  min-width: 0;
   min-height: 38px;
   border: 1px solid transparent;
   border-radius: 10px;
@@ -1554,7 +1635,7 @@ textarea {
   display: grid;
   grid-template-columns: repeat(5, minmax(56px, 1fr));
   gap: 4px;
-  width: min(560px, calc(100% - 20px));
+  width: min(560px, calc(100vw - 20px));
   transform: translateX(-50%);
   border: 1px solid rgba(203, 213, 225, 0.9);
   border-radius: 18px;
@@ -1568,6 +1649,7 @@ textarea {
   display: grid;
   place-items: center;
   gap: 2px;
+  min-width: 0;
   min-height: 48px;
   border: 0;
   border-radius: 12px;
@@ -1893,7 +1975,7 @@ html {
     z-index: 4;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
-    margin: 14px -14px 14px;
+    margin: 14px 0;
     padding: 10px 14px;
     border-top: 1px solid #e2e8f0;
     background: rgba(255, 255, 255, 0.96);
@@ -1927,7 +2009,7 @@ html {
 
   .bottom-nav {
     bottom: max(8px, env(safe-area-inset-bottom));
-    width: calc(100% - 12px);
+    width: calc(100vw - 12px);
   }
 
   .bottom-nav button {

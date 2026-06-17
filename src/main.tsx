@@ -86,6 +86,15 @@ function pointHeading(point: StandardPoint): string {
   return point.title && point.title !== point.code ? `${point.code} · ${point.title}` : point.code;
 }
 
+function compactVoicePoint(point: StandardPoint) {
+  return {
+    id: point.id,
+    code: point.code,
+    mandatory: point.mandatory,
+    ko: point.ko ?? null,
+  };
+}
+
 function supportedAudioMimeType(): string {
   if (typeof MediaRecorder === 'undefined' || typeof MediaRecorder.isTypeSupported !== 'function') return '';
   return preferredAudioMimeTypes.find((type) => MediaRecorder.isTypeSupported(type)) ?? '';
@@ -124,61 +133,6 @@ function compactPointLabel(point: StandardPoint): string {
   return `${point.code} · ${text}`;
 }
 
-function normalizeSpeechText(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .replace(/\s+/g, ' ')
-    .trim();
-}
-
-function extractField(segment: string, label: string): string {
-  const fieldPattern = new RegExp(`${label}\\s*[:,-]?\\s*([\\s\\S]*?)(?=\\b(?:comentario|datos adicionales|datos|evidencias|evidencia|accion correctiva|accion|responsable|fecha limite|punto|requisito)\\b|$)`, 'i');
-  return segment.match(fieldPattern)?.[1]?.trim() ?? '';
-}
-
-function parseVoiceAuditTranscript(transcript: string, points: StandardPoint[]): VoiceAuditResult[] {
-  const normalizedTranscript = normalizeSpeechText(transcript);
-  if (!normalizedTranscript) return [];
-
-  const codeMatches = Array.from(normalizedTranscript.matchAll(/\b\d+(?:\.\d+){0,5}\*?\b/g));
-  if (!codeMatches.length) return [];
-
-  const pointByCode = new Map(points.map((point) => [point.code.replace(/\*$/, ''), point]));
-
-  return codeMatches.flatMap((match, index) => {
-    const code = match[0].replace(/\*$/, '');
-    const point = pointByCode.get(code);
-    if (!point) return [];
-
-    const nextMatch = codeMatches[index + 1];
-    const segment = normalizedTranscript.slice(match.index, nextMatch?.index ?? normalizedTranscript.length).trim();
-    const patch: Partial<AuditEntry> = {};
-
-    if (/\bno\s+conforme\b|\bno\s+cumple\b|\bno\s+pasa\b/.test(segment)) patch.status = 'fail';
-    else if (/\bno\s+aplica\b|\bno\s+aplicable\b/.test(segment)) patch.status = 'not_applicable';
-    else if (/\bconforme\b|\bcumple\b|\bpasa\b|\bapto\b/.test(segment)) patch.status = 'pass';
-
-    const comment = extractField(segment, 'comentario');
-    const extraData = extractField(segment, 'datos adicionales|datos');
-    const evidence = extractField(segment, 'evidencias|evidencia');
-    const correctiveAction = extractField(segment, 'accion correctiva|accion');
-    const responsible = extractField(segment, 'responsable');
-    const dueDate = extractField(segment, 'fecha limite');
-
-    if (comment) patch.comment = comment;
-    if (extraData) patch.extraData = extraData;
-    if (evidence) patch.evidence = evidence;
-    if (correctiveAction) patch.correctiveAction = correctiveAction;
-    if (responsible) patch.responsible = responsible;
-    if (dueDate) patch.dueDate = dueDate;
-    if (!comment && !extraData && !evidence && !correctiveAction) patch.comment = segment.replace(new RegExp(`^${code.replace(/\./g, '\\.')}\\s*`), '').trim();
-
-    return [{ point, patch, excerpt: segment }];
-  });
-}
-
 function loadState() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -192,6 +146,7 @@ function initialMetadata(): AuditMetadata {
   return {
     company: '',
     site: '',
+    scope: '',
     auditor: '',
     auditDate: new Date().toISOString().slice(0, 10),
     standardName: 'IFS-HPC',
@@ -208,7 +163,7 @@ function App() {
   const [statusFilter, setStatusFilter] = React.useState<AuditStatus | 'all'>('all');
   const [workflowStep, setWorkflowStep] = React.useState<WorkflowStep>(stored?.workflowStep ?? 'company');
   const [activeView, setActiveView] = React.useState<AppView>('audit');
-  const [metadata, setMetadata] = React.useState<AuditMetadata>(stored?.metadata ?? initialMetadata());
+  const [metadata, setMetadata] = React.useState<AuditMetadata>({ ...initialMetadata(), ...(stored?.metadata ?? {}) });
   const [auditMode, setAuditMode] = React.useState<AuditMode>(stored?.auditMode ?? 'manual');
   const [voiceDraftResults, setVoiceDraftResults] = React.useState<VoiceAuditResult[]>(stored?.voiceDraftResults ?? []);
 
@@ -272,8 +227,8 @@ function App() {
 
   function handleCompanyNext(event: React.FormEvent) {
     event.preventDefault();
-    if (!metadata.company.trim() || !metadata.auditor.trim() || !metadata.auditDate) {
-      toast.error('Completa empresa, auditor y fecha para continuar.');
+    if (!metadata.company.trim() || !metadata.scope.trim() || !metadata.auditor.trim() || !metadata.auditDate) {
+      toast.error('Completa empresa, alcance, auditor y fecha para continuar.');
       return;
     }
     setWorkflowStep('scope');
@@ -356,13 +311,23 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
-  function handleExport() {
+  async function handleExport() {
     if (!metadata.company.trim()) {
       toast.error('Indica la empresa antes de exportar.');
       setActiveView('data');
       return;
     }
-    exportAuditWorkbook(auditPoints, entries, metadata);
+    if (!metadata.scope.trim()) {
+      toast.error('Indica el alcance antes de exportar.');
+      setActiveView('data');
+      return;
+    }
+    try {
+      await exportAuditWorkbook(auditPoints, entries, metadata);
+      toast.success('Excel exportado con la plantilla IFS-HPC.');
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : 'No se pudo exportar el Excel.');
+    }
   }
 
   function goToPoint(offset: number) {
@@ -518,7 +483,7 @@ function App() {
               onStart={startAudit}
               onImport={handleImport}
               title="Modificar Alcance"
-              description="Ajusta los puntos de auditoría sin perder comentarios, evidencias ni estados ya guardados."
+              description="Ajusta los puntos de auditoría sin perder comentarios, datos adicionales ni estados ya guardados."
               backLabel="Volver a auditoria"
               startLabel="Guardar alcance"
               compactFooter
@@ -742,8 +707,7 @@ function VoiceAuditStep({
   const analyserFrameRef = React.useRef<number | null>(null);
   const volumeSamplesRef = React.useRef<number[]>([]);
 
-  const detectedResults = React.useMemo(() => parseVoiceAuditTranscript(transcript, points), [points, transcript]);
-  const reviewResults = processedResults.length ? processedResults : detectedResults;
+  const reviewResults = processedResults;
   const hasProcessedResults = processedResults.length > 0;
   const canUseSpeechRecognition = Boolean(SpeechRecognitionCtor);
 
@@ -911,7 +875,7 @@ function VoiceAuditStep({
       const form = new FormData();
       if (audioBlob) form.append('audio', audioBlob, `auditoria-voz.${audioFileExtension(audioBlob.type)}`);
       form.append('transcript', transcript);
-      form.append('points', JSON.stringify(points));
+      form.append('points', JSON.stringify(points.map(compactVoicePoint)));
 
       const response = await fetch(`${API_BASE_URL}/api/voice-audit`, {
         method: 'POST',
@@ -931,22 +895,17 @@ function VoiceAuditStep({
         if (item.status && item.status !== 'pending') patch.status = item.status;
         if (item.comment) patch.comment = item.comment;
         if (item.extraData) patch.extraData = item.extraData;
-        if (item.evidence) patch.evidence = item.evidence;
-        if (item.correctiveAction) patch.correctiveAction = item.correctiveAction;
-        if (item.responsible) patch.responsible = item.responsible;
-        if (item.dueDate) patch.dueDate = item.dueDate;
         return [{ point, patch, excerpt: item.sourceText || item.comment || '', confidence: item.confidence }];
       });
 
       if (data.warnings?.length) toast.message(data.warnings.join(' · '));
-      const nextResults = results.length ? results : detectedResults;
-      if (!nextResults.length) {
+      if (!results.length) {
         toast.error('No se detectaron puntos auditables en la transcripcion.');
         return;
       }
-      setProcessedResults(nextResults);
-      onDraftResultsChange(nextResults);
-      toast.success(`${nextResults.length} puntos identificados y listos para revisar`);
+      setProcessedResults(results);
+      onDraftResultsChange(results);
+      toast.success(`${results.length} puntos identificados y listos para revisar`);
     } catch (error) {
       toast.error(error instanceof Error ? error.message : 'No se pudo procesar con IA.');
     } finally {
@@ -1004,7 +963,7 @@ function VoiceAuditStep({
             </div>
             <div>
               <dt>Campos</dt>
-              <dd>comentario de auditoria, datos adicionales, evidencia, accion correctiva, responsable, fecha limite</dd>
+              <dd>comentario de auditoria, datos adicionales</dd>
             </div>
             <div>
               <dt>Ejemplo</dt>
@@ -1076,7 +1035,7 @@ function VoiceAuditStep({
               onDraftResultsChange([]);
             }}
             rows={8}
-            placeholder="Ejemplo: Punto 1.1.1 conforme. Comentario politica comunicada. Datos adicionales revisado con direccion. Punto 1.1.2 no conforme. Comentario falta evidencia documental."
+            placeholder="Ejemplo: Punto 1.1.1 conforme. Comentario politica comunicada. Datos adicionales revisado con direccion. Punto 1.1.2 no conforme. Comentario falta registro actualizado."
           />
         </label>
       </section>
@@ -1104,70 +1063,51 @@ function VoiceAuditStep({
         ) : null}
 
         <div className="voice-result-list">
-          {reviewResults.map((result, index) => (
-            <details key={`${result.point.id}-${result.excerpt}`} className="voice-result-item" open={hasProcessedResults && index === 0}>
-              <summary>
-                <strong>{result.point.code}</strong>
-                <span>{statusLabels[voiceResultStatus(result)]}</span>
-                <p>{result.patch.comment || result.excerpt || pointRequirement(result.point)}</p>
-                <ChevronDown size={18} aria-hidden="true" />
-              </summary>
-              <div className="voice-result-details">
-                <dl>
-                  <div>
-                    <dt>Requisito</dt>
-                    <dd>{pointRequirement(result.point)}</dd>
-                  </div>
-                  <div>
-                    <dt>Estado</dt>
-                    <dd>{statusLabels[voiceResultStatus(result)]}</dd>
-                  </div>
-                  {result.patch.comment ? (
+          {reviewResults.map((result, index) => {
+            const status = voiceResultStatus(result);
+            const summaryText = [result.patch.comment, result.patch.extraData].filter(Boolean).join(' · ');
+
+            return (
+              <details key={`${result.point.id}-${result.excerpt}`} className={`voice-result-item status-${status}`} open={hasProcessedResults && index === 0}>
+                <summary>
+                  <strong>{result.point.code}</strong>
+                  <span className="voice-status-pill">{statusLabels[status]}</span>
+                  <p>{summaryText || result.excerpt || pointRequirement(result.point)}</p>
+                  <ChevronDown size={18} aria-hidden="true" />
+                </summary>
+                <div className="voice-result-details">
+                  <dl>
                     <div>
-                      <dt>Comentario</dt>
-                      <dd>{result.patch.comment}</dd>
+                      <dt>Requisito</dt>
+                      <dd>{pointRequirement(result.point)}</dd>
                     </div>
-                  ) : null}
-                  {result.patch.extraData ? (
+                    <div>
+                      <dt>Estado</dt>
+                      <dd>
+                        <span className="voice-status-pill compact">{statusLabels[status]}</span>
+                      </dd>
+                    </div>
+                    {result.patch.comment ? (
+                      <div>
+                        <dt>Comentario</dt>
+                        <dd>{result.patch.comment}</dd>
+                      </div>
+                    ) : null}
                     <div>
                       <dt>Datos adicionales</dt>
-                      <dd>{result.patch.extraData}</dd>
+                      <dd className={!result.patch.extraData ? 'empty-field' : undefined}>{result.patch.extraData || 'Sin datos adicionales'}</dd>
                     </div>
-                  ) : null}
-                  {result.patch.evidence ? (
-                    <div>
-                      <dt>Evidencia</dt>
-                      <dd>{result.patch.evidence}</dd>
-                    </div>
-                  ) : null}
-                  {result.patch.correctiveAction ? (
-                    <div>
-                      <dt>Accion correctiva</dt>
-                      <dd>{result.patch.correctiveAction}</dd>
-                    </div>
-                  ) : null}
-                  {result.patch.responsible ? (
-                    <div>
-                      <dt>Responsable</dt>
-                      <dd>{result.patch.responsible}</dd>
-                    </div>
-                  ) : null}
-                  {result.patch.dueDate ? (
-                    <div>
-                      <dt>Fecha limite</dt>
-                      <dd>{result.patch.dueDate}</dd>
-                    </div>
-                  ) : null}
-                  {result.excerpt ? (
-                    <div>
-                      <dt>Fragmento detectado</dt>
-                      <dd>{result.excerpt}</dd>
-                    </div>
-                  ) : null}
-                </dl>
-              </div>
-            </details>
-          ))}
+                    {result.excerpt ? (
+                      <div>
+                        <dt>Fragmento detectado</dt>
+                        <dd>{result.excerpt}</dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                </div>
+              </details>
+            );
+          })}
         </div>
       </section>
 
@@ -1427,16 +1367,6 @@ function AuditPointPanel({
       <div className="form-grid">
         <Textarea name="audit-comment" label="Comentario de auditoria" value={entry.comment} onChange={(value) => onUpdate({ comment: value })} />
         <Textarea name="audit-extra-data" label="Datos adicionales" value={entry.extraData} onChange={(value) => onUpdate({ extraData: value })} />
-        <Textarea name="audit-evidence" label="Evidencias" value={entry.evidence} onChange={(value) => onUpdate({ evidence: value })} />
-        <Textarea name="audit-corrective-action" label="Accion correctiva" value={entry.correctiveAction} onChange={(value) => onUpdate({ correctiveAction: value })} />
-        <label>
-          <span>Responsable</span>
-          <input name="corrective-responsible" autoComplete="name" value={entry.responsible} onChange={(event) => onUpdate({ responsible: event.target.value })} />
-        </label>
-        <label>
-          <span>Fecha limite</span>
-          <input name="corrective-due-date" autoComplete="off" type="date" value={entry.dueDate} onChange={(event) => onUpdate({ dueDate: event.target.value })} />
-        </label>
       </div>
     </motion.section>
   );
@@ -1452,6 +1382,7 @@ function MetadataForm({
   const fields = [
     { key: 'company', label: 'Empresa', name: 'organization', autoComplete: 'organization', type: 'text' },
     { key: 'site', label: 'Centro', name: 'site', autoComplete: 'off', type: 'text' },
+    { key: 'scope', label: 'Alcance', name: 'audit-scope', autoComplete: 'off', type: 'text' },
     { key: 'auditor', label: 'Auditor', name: 'auditor', autoComplete: 'name', type: 'text' },
     { key: 'auditDate', label: 'Fecha', name: 'audit-date', autoComplete: 'off', type: 'date' },
   ] as const;

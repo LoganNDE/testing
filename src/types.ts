@@ -28,6 +28,7 @@ export interface AuditEntry {
 export interface AuditMetadata {
   company: string;
   site: string;
+  scope: string;
   auditor: string;
   auditDate: string;
   standardName: string;
